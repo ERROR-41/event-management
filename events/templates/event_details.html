@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Event List</h1>
+<table class="min-w-full bg-white border border-gray-300">
+    <thead>
+        <tr>
+            <th class="border px-4 py-2">Name</th>
+            <th class="border px-4 py-2">Category</th>
+            <th class="border px-4 py-2">Participants</th>
+            <th class="border px-4 py-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% comment %} {% for event in events %}
+        <tr>
+            {% comment %} <td class="border px-4 py-2">{{ event }}</td>
+            <td class="border px-4 py-2">{{ event.category.name }}</td>
+            <td class="border px-4 py-2">{{ event.participant_set.count }}</td> {% endcomment %}
+            {% comment %} <td class="border px-4 py-2">
+                <a href="{% url 'event_detail' event.pk %}" class="text-blue-600">View</a>
+                <a href="{% url 'event_update' event.pk %}" class="text-yellow-600 ml-2">Edit</a>
+                <a href="{% url 'event_delete' event.pk %}" class="text-red-600 ml-2">Delete</a>
+            </td>
+        </tr> {% endcomment %}
+        {% comment %} {% endfor %} {% endcomment %}
+    </tbody>
+</table>
+{% endblock %}

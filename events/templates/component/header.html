@@ -1,0 +1,51 @@
+<nav class="bg-gray-900 bg-opacity-30 backdrop-blur-lg border-b
+   border-gray-700 px-15 py-4  h-[10vh] my-auto fixed top-0 w-[90.5vw] z-50" >
+
+
+  <div class="container mx-auto flex justify-between items-center ">
+    <a class="text-2xl font-bold text-white" href="#">
+      <i class="fas fa-calendar-alt"> </i>
+    </a>
+    <div class="flex space-x-4 text-lg font-semibold ">
+      <a
+        class="text-white hover:text-blue-400 transition-colors  duration-300 "
+        href="#"
+      >
+        Home
+      </a>
+      <a
+        class="text-white hover:text-blue-400 transition-colors duration-300"
+        href="{% url 'dashboard' %}"
+      >
+        Dashboard
+      </a>
+      <a
+        class="text-white hover:text-blue-400 transition-colors duration-300"
+        href="{% url 'event_create' %}"
+      >
+        Create Event
+      </a>
+      <a
+        class="text-white hover:text-blue-400 transition-colors duration-300"
+        href="{% url 'category_create' %}"
+      >
+        Create Category
+      </a>
+      <a
+        class="text-white hover:text-blue-400 transition-colors duration-300"
+        href="{% url 'participant_create' %}"
+      >
+        Create Participants
+      </a>
+    </div>
+    <button
+      class="text-white hover:text-blue-400 transition-colors focus:outline-none"
+    >
+      <i class="fas fa-moon"> </i>
+    </button>
+  </div>
+</nav>
+
+<div class="mt-[10vh]">
+  <!-- Your first content goes here -->
+</div>

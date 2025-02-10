@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class='h-[90vh]'>
+    <h1 class="text-2xl font-bold mb-4">Delete Event</h1>
+<p>Are you sure you want to delete "{{ event.name }}"?</p>
+<form method="post" class="mt-4">
+    {% csrf_token %}
+    <button type="submit" class="bg-red-600 text-white p-2 rounded">Confirm Delete</button>
+    <a href="{% url 'dashboard' %}" class="ml-2 inline-block text-gray-600">Cancel</a>
+</form>
+</div>
+{% endblock %}
