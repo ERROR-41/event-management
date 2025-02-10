@@ -1,29 +1,99 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Event List</h1>
-<table class="min-w-full bg-white border border-gray-300">
-    <thead>
-        <tr>
-            <th class="border px-4 py-2">Name</th>
-            <th class="border px-4 py-2">Category</th>
-            <th class="border px-4 py-2">Participants</th>
-            <th class="border px-4 py-2">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% comment %} {% for event in events %}
-        <tr>
-            {% comment %} <td class="border px-4 py-2">{{ event }}</td>
-            <td class="border px-4 py-2">{{ event.category.name }}</td>
-            <td class="border px-4 py-2">{{ event.participant_set.count }}</td> {% endcomment %}
-            {% comment %} <td class="border px-4 py-2">
-                <a href="{% url 'event_detail' event.pk %}" class="text-blue-600">View</a>
-                <a href="{% url 'event_update' event.pk %}" class="text-yellow-600 ml-2">Edit</a>
-                <a href="{% url 'event_delete' event.pk %}" class="text-red-600 ml-2">Delete</a>
-            </td>
-        </tr> {% endcomment %}
-        {% comment %} {% endfor %} {% endcomment %}
-    </tbody>
-</table>
+<div class="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="bg-gray-800 rounded-3xl shadow-2xl overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+        <!-- Event Image Section -->
+        <div class="relative group">
+          <img
+            class="w-full h-full object-cover rounded-2xl transform group-hover:scale-105 transition duration-500"
+            src="https://storage.googleapis.com/a1aa/image/TF7EN2O9N_lxRwTv2twIeFSUTMEQex1N4zUOLaZj3Rk.jpg"
+            alt="{{ event.name }}"
+          />
+          <div class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium">
+            <i class="fas fa-tag mr-2"></i> category Name: {{ event.category.name }}
+          </div>
+        </div>
+
+        <!-- Event Details Section -->
+        <div class="flex flex-col justify-center">
+          <div class="mb-8">
+            <span class="text-blue-400 text-sm font-medium uppercase tracking-wider">Event Name</span>
+            <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-300 mt-2">
+              {{ event.name }}
+            </h1>
+          </div>
+
+          <!-- Event Meta Data -->
+          <div class="space-y-5 mb-8">
+            <div class="flex items-center">
+              <i class="fas fa-calendar-day text-blue-400 text-xl w-8"></i>
+              <div>
+                <span class="text-gray-400 text-sm">Event Date & Time</span>
+                <p class="text-gray-300 font-medium">
+                  {{ event.date|date:"F j, Y" }} at {{ event.time|time:"g:i A" }}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center">
+              <i class="fas fa-map-marker-alt text-blue-400 text-xl w-8"></i>
+              <div>
+                <span class="text-gray-400 text-sm">Event Location</span>
+                <p class="text-gray-300 font-medium">{{ event.location }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center">
+              <i class="fas fa-tags text-blue-400 text-xl w-8"></i>
+              <div>
+                <span class="text-gray-400 text-sm">Event Category</span>
+                <p class="text-gray-300 font-medium">
+                  {{ event.category.name }} <span class="text-gray-400 text-sm">({{ event.category.description }})</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center">
+              <i class="fas fa-users text-blue-400 text-xl w-8"></i>
+              <div>
+                <span class="text-gray-400 text-sm">Participants</span>
+                <p class="text-gray-300 font-medium">
+                  {{ event.participants.count }} Registered
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Event Description -->
+          <div class="bg-gray-700 p-6 rounded-xl mb-8">
+            <h3 class="text-gray-300 font-semibold mb-3 flex items-center">
+              <i class="fas fa-align-left text-blue-400 mr-2"></i>
+              Event Description
+            </h3>
+            <p class="text-gray-400 leading-relaxed">
+              {{ event.description }}
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg 
+                          transition-all duration-300 transform hover:scale-105 flex-1"
+                          href="{% url 'event_create' %}">
+              <i class="fas fa-ticket-alt mr-2"></i> Create More Event
+            </a>
+            <a class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-8 py-3 rounded-lg 
+                          transition-all duration-300 transform hover:scale-105 flex-1"
+                          href="{% url 'event_update' event.id %}">
+              <i class="fas fa-edit mr-2"></i> Edit Event
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

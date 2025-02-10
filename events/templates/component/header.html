@@ -1,51 +1,57 @@
-<nav class="bg-gray-900 bg-opacity-30 backdrop-blur-lg border-b
-   border-gray-700 px-15 py-4  h-[10vh] my-auto fixed top-0 w-[90.5vw] z-50" >
+<nav class="bg-gray-900   border-b
+  border-gray-700 px-15 py-4 h-[12vh]  z-10 fixed top-0 left-0 right-0
+  mx-auto flex justify-between items-cente max-w-[90.6vw]
+   ">
 
-
-  <div class="container mx-auto flex justify-between items-center ">
-    <a class="text-2xl font-bold text-white" href="#">
-      <i class="fas fa-calendar-alt"> </i>
-    </a>
-    <div class="flex space-x-4 text-lg font-semibold ">
-      <a
-        class="text-white hover:text-blue-400 transition-colors  duration-300 "
-        href="#"
-      >
-        Home
-      </a>
-      <a
-        class="text-white hover:text-blue-400 transition-colors duration-300"
-        href="{% url 'dashboard' %}"
-      >
-        Dashboard
-      </a>
-      <a
-        class="text-white hover:text-blue-400 transition-colors duration-300"
-        href="{% url 'event_create' %}"
-      >
-        Create Event
-      </a>
-      <a
-        class="text-white hover:text-blue-400 transition-colors duration-300"
-        href="{% url 'category_create' %}"
-      >
-        Create Category
-      </a>
-      <a
-        class="text-white hover:text-blue-400 transition-colors duration-300"
-        href="{% url 'participant_create' %}"
-      >
-        Create Participants
-      </a>
-    </div>
-    <button
-      class="text-white hover:text-blue-400 transition-colors focus:outline-none"
+  <div class="container mx-auto flex justify-between items-center">
+   <a class="text-2xl font-bold text-white" href="#">
+    <i class="fas fa-calendar-alt"> </i>
+   </a>
+   <div class="flex space-x-4 text-lg font-semibold ">
+    <a
+      class="text-white hover:text-blue-400 transition-colors duration-300
+       px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700"
+      href="#"
     >
-      <i class="fas fa-moon"> </i>
-    </button>
+      Home
+    </a>
+    <a
+      class="text-white hover:text-blue-400 transition-colors duration-300
+       px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700"
+      href="{% url 'dashboard' %}"
+    >
+      Dashboard
+    </a>
+    <a
+      class="text-white hover:text-blue-400 transition-colors duration-300
+       px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700"
+      href="{% url 'event_create' %}"
+    >
+      Create Event
+    </a>
+    <a
+      class="text-white hover:text-blue-400 transition-colors duration-300
+       px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700"
+      href="{% url 'category_create' %}"
+    >
+      Create Category
+    </a>
+    <a
+      class="text-white hover:text-blue-400 transition-colors duration-300
+       px-4 py-2 rounded-lg bg-gray-800  hover:bg-gray-700"
+      href="{% url 'participant_create' %}"
+    >
+      Create Participants
+    </a>
+   </div>
+   <button
+    class="text-white hover:text-blue-400 transition-colors focus:outline-none"
+   >
+    <i class="fas fa-moon"> </i>
+   </button>
   </div>
 </nav>
 
-<div class="mt-[10vh]">
+<div class="mt-[12vh]">
   <!-- Your first content goes here -->
 </div>

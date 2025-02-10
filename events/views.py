@@ -10,29 +10,44 @@ def error(request):
     return render(request, 'error.html')
 
 def dashboard(request):
-    events = Event.objects.select_related('category').prefetch_related('participants').all()
+    type = request.GET.get('type', 'all')
+    base_events = Event.objects.select_related('category').prefetch_related('participants').all()
     total_participants = Participant.objects.aggregate(total=Count('id'))['total']
+    events = base_events  # Initialize events with base_events
 
+    today = timezone.now().date()
+    
+    if type =='total_events':
+        events=base_events
+    elif type == 'upcoming_events':
+        events = base_events.filter(date__gte=timezone.now()).order_by('date')
+    elif type == 'past_events':
+        events = base_events.filter(date__lt=timezone.now()).order_by('-date')
+    else :
+        events = base_events.filter(date=today).order_by('date')
+    
     context = {
         'events': events,
+        'total_events': base_events.count(),
         'categories': Category.objects.all(),
         'total_participants': total_participants,
         'upcoming_events': Event.objects.filter(date__gte=timezone.now()).order_by('date').count(),
         'past_events': Event.objects.filter(date__lt=timezone.now()).order_by('-date').count(),
+        'type': type,
     }
-    print(events)
+   
     return render(request, 'dashboard.html', context)
 
 # all event related views
 def event_create(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         form = EventForm(request.POST)
-        if form.is_valid:
+        if form.is_valid():
             form.save()
-            return redirect('dashboad')
-    else :
-        form=EventForm()
-    return render(request,'event_form.html',{'form':form})  
+            return redirect('dashboard')
+    else:
+        form = EventForm()
+    return render(request, 'event_form.html', {'form': form})
     
 
 
@@ -52,11 +67,12 @@ def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk)
     if request.method == 'POST':
         event.delete()
-        return redirect(request,'event_comfirm_delete.html', {'event': event})
+        return redirect('dashboard')
+    return render(request, 'event_confirm_delete.html', {'event': event})
     
 def event_details(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    return render(request, 'event_details.html', {'events': event})
+    return render(request, 'event_details.html', {'event': event})
 
 
 # all category related views
