@@ -4,6 +4,8 @@ from .models import Event, Participant, Category
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
+ 
+    
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
@@ -51,4 +53,5 @@ class CategoryForm(forms.ModelForm):
         labels = {
             'name': 'Category Name',
         }
-    
+        
+

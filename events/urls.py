@@ -2,7 +2,9 @@ from django.urls import path
 from events import views
 
 urlpatterns = [
-    path('test/', views.test, name='test'),
+     # home route
+    
+    path('', views.home, name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('error/', views.error, name='error'),
     path('events/create/', views.event_create, name='event_create'),
@@ -19,6 +21,7 @@ urlpatterns = [
     path('participant/create/', views.participant_create, name='participant_create'),
     path('participant/<int:pk>/', views.participant_update, name='participant_update'),
     
-    # home route
-    path('', views.home, name='home'),
+   
 ]
+
+handler500 = 'events.views.error_500'
