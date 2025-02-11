@@ -32,7 +32,7 @@ class ParticipantForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Full Name'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Email Address'}),
-            'events': forms.SelectMultiple(attrs={'size': 5}),
+            'events': forms.CheckboxSelectMultiple(attrs={"type": 'multiple'}),
         }
         labels = {
             'name': 'Full Name',

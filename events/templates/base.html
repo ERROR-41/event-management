@@ -14,10 +14,11 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
+     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   </head>
-  <body class="xl:mx-16 ">
+  <body class="xl:mx-18 " style='max-width:90vw min-height:90vh;'>
     {% include "./component/header.html" %}
-    <main style="min-height:90vh;">
+    <main >
       {% block content %} 
       {% endblock content %}
     </main>

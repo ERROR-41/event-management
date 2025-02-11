@@ -9,6 +9,10 @@ from django.utils import timezone
 def error(request):
     return render(request, 'error.html')
 
+def test(request):
+    return render(request, 'test.html')
+
+
 def dashboard(request):
     type = request.GET.get('type', 'all')
     base_events = Event.objects.select_related('category').prefetch_related('participants').all()
@@ -37,6 +41,21 @@ def dashboard(request):
     }
    
     return render(request, 'dashboard.html', context)
+
+
+def home(request):
+    base_events = Event.objects.select_related('category').prefetch_related('participants').all()
+    form = EventForm()
+    context = {
+        'events': base_events,
+        'form': form,
+        'total_events': base_events.count(),
+        'categories': Category.objects.all(),
+        'upcoming_events': Event.objects.filter(date__gte=timezone.now()).order_by('date').count(),
+        'past_events': Event.objects.filter(date__lt=timezone.now()).order_by('-date').count(),
+    }
+   
+    return render(request, 'home.html', context)
 
 # all event related views
 def event_create(request):

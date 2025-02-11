@@ -1,15 +1,21 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+
+{% block title %}
+  Dashboard
+{% endblock title %}
+
+{% block content %}
 
   <!-- Main Content -->
 
 {% comment %} stat grid  {% endcomment %}
 
- <div class="bg-gray-900  p-6  rounded-b-2xl mx-auto my-auto  relative ">
+ <div class="bg-gray-900  p-6  rounded-b-2xl mx-auto my-auto scroll-smooth mt-2 ">
   <div class="container mx-auto ">
    <!-- Stats Grid -->
     <h1 class="text-2xl text-white mb-4 font-medium ">Dashboard</h1>
 
-   <div class="grid grid-cols-1 md:grid-cols-4 gap-6  ">
+   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4  gap-6  ">
 
     {% comment %} ##total participant {% endcomment %}
     
@@ -29,10 +35,10 @@
     <a href="{% url 'dashboard' %}?type=total_events">
     <div class="p-6 rounded-lg bg-gray-800 shadow-lg hover:shadow-2xl transition-shadow 
     duration-300 bg-opacity-30 backdrop-blur-lg border border-gray-700 text-white
-    hover:text-gray-800  hover:bg-gray-100">
-     <h2 class="text-xl md:text-2xl font-bold mb-2 ">
+    hover:text-gray-800  hover:bg-gray-100 ">
+     <h2 class="text-md md:text-2xl font-bold mb-2 ">
       Total Events
-     </h2>
+     </h2>  
      <p class="text-3xl md:text-4xl">
        {{total_events}}
      </p>
@@ -158,6 +164,6 @@
     </div>
 {% comment %} event card end {% endcomment %}
 
-</div>
+
 
 {% endblock %}

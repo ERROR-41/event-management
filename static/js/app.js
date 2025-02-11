@@ -1,8 +1,9 @@
-function toggleMenu() {
-  var menu = document.getElementById("mobile-menu");
-  if (menu.classList.contains("hidden")) {
-    menu.classList.remove("hidden");
-  } else {
-    menu.classList.add("hidden");
-  }
-}
+document.querySelectorAll("a.smooth-scroll").forEach((anchor) => {
+  anchor.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    document.querySelector(this.getAttribute("href")).scrollIntoView({
+      behavior: "smooth",
+    });
+  });
+});

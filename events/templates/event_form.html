@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
  {% load tailwind_filters %}
 {% block content %}
-<div class="w-full  max-w-2xl mx-auto sm:px-6 lg:px-8 py-8 mt-8 ">
+<div class="w-sm md:w-full  max-w-2xl  mx-auto sm:px-6 lg:px-8 py-8 mt-8 ">
   <h1 class="text-4xl font-bold mb-8 text-start">
     {% if form.instance.pk %}Edit Event{% else %}Create Event{% endif %}
   </h1>
   <form method="post" class="space-y-4 ">
     {% csrf_token %}
-    <div class="space-y-4">
+    <div class="space-y-4 ">
       {{ form |crispy }}
     </div>
     <div class="flex gap-6 items-center mt-4 ">

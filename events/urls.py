@@ -2,6 +2,7 @@ from django.urls import path
 from events import views
 
 urlpatterns = [
+    path('test/', views.test, name='test'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('error/', views.error, name='error'),
     path('events/create/', views.event_create, name='event_create'),
@@ -11,10 +12,13 @@ urlpatterns = [
     
     # category
     path('category/create/', views.category_create, name='category_create'),
-    path('category/<int:pk>/', views.category_update, name='category_update'),
+    path('category/<int:pk>/edit', views.category_update, name='category_update'),
     
     
     # participant
     path('participant/create/', views.participant_create, name='participant_create'),
     path('participant/<int:pk>/', views.participant_update, name='participant_update'),
+    
+    # home route
+    path('', views.home, name='home'),
 ]

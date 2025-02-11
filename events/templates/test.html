@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmony Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="font-poppins">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/90 backdrop-blur-sm z-50 py-4 px-6 lg:px-16 flex justify-between items-center">
+        <div class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+            Harmony
+        </div>
+        
+        <div class="hidden lg:flex gap-8 items-center" id="navMenu">
+            <a href="#home" class="text-gray-600 hover:text-purple-600">Home</a>
+            <a href="#about" class="text-gray-600 hover:text-purple-600">About</a>
+            <a href="#speakers" class="text-gray-600 hover:text-purple-600">Speakers</a>
+            <a href="#schedule" class="text-gray-600 hover:text-purple-600">Schedule</a>
+            <a href="#contact" class="text-gray-600 hover:text-purple-600">Contact</a>
+            <a href="#tickets" class="bg-gradient-to-r from-purple-600 to-blue-500 text-white px-6 py-2 rounded-full">
+                Get Tickets
+            </a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuButton" class="lg:hidden text-gray-600">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="md:hidden fixed top-20 right-6 bg-white p-6 rounded-xl shadow-lg hidden z-50">
+        <div class="flex flex-col gap-4">
+            <a href="#home" class="text-gray-600 hover:text-purple-600">Home</a>
+            <a href="#about" class="text-gray-600 hover:text-purple-600">About</a>
+            <a href="#speakers" class="text-gray-600 hover:text-purple-600">Speakers</a>
+            <a href="#schedule" class="text-gray-600 hover:text-purple-600">Schedule</a>
+            <a href="#contact" class="text-gray-600 hover:text-purple-600">Contact</a>
+            <a href="#tickets" class="bg-gradient-to-r from-purple-600 to-blue-500 text-white px-6 py-2 rounded-full text-center">
+                Get Tickets
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen bg-[url('https://picsum.photos/1920/1080')] bg-cover bg-center relative pt-24">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="relative z-10 text-center text-white container mx-auto px-4 h-screen flex items-center justify-center">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl lg:text-7xl font-bold mb-6">Global Tech Summit 2025</h1>
+                <p class="text-xl mb-12">February 25-27, 2025 | San Francisco Convention Center</p>
+                
+                <!-- Countdown Timer -->
+                <div class="flex justify-center gap-8 mb-12" id="countdown">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold mb-2" id="days">00</div>
+                        <div class="text-sm">Days</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold mb-2" id="hours">00</div>
+                        <div class="text-sm">Hours</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold mb-2" id="minutes">00</div>
+                        <div class="text-sm">Minutes</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold mb-2" id="seconds">00</div>
+                        <div class="text-sm">Seconds</div>
+                    </div>
+                </div>
+
+                <button class="bg-gradient-to-r from-purple-600 to-blue-500 text-white px-8 py-4 rounded-full text-lg hover:scale-105 transition-transform">
+                    Register Now
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Cards -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <i class="fas fa-map-marker-alt text-4xl text-purple-600 mb-6"></i>
+                <h3 class="text-xl font-bold mb-4">Location</h3>
+                <p class="text-gray-600">San Francisco, CA</p>
+            </div>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <i class="fas fa-calendar-alt text-4xl text-purple-600 mb-6"></i>
+                <h3 class="text-xl font-bold mb-4">Date & Time</h3>
+                <p class="text-gray-600">25-27 Feb 2025</p>
+            </div>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <i class="fas fa-microphone text-4xl text-purple-600 mb-6"></i>
+                <h3 class="text-xl font-bold mb-4">Speakers</h3>
+                <p class="text-gray-600">50+ Experts</p>
+            </div>
+            
+            <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+                <i class="fas fa-ticket-alt text-4xl text-purple-600 mb-6"></i>
+                <h3 class="text-xl font-bold mb-4">Tickets</h3>
+                <p class="text-gray-600">Get Yours Now</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section class="py-20 container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-12">Our Sponsors</h2>
+        <div class="flex flex-wrap justify-center gap-12 items-center opacity-70">
+            <img src="https://via.placeholder.com/150x60" class="h-12" alt="Sponsor">
+            <img src="https://via.placeholder.com/150x60" class="h-12" alt="Sponsor">
+            <img src="https://via.placeholder.com/150x60" class="h-12" alt="Sponsor">
+            <img src="https://via.placeholder.com/150x60" class="h-12" alt="Sponsor">
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex justify-center gap-6 mb-8">
+                <a href="#" class="hover:text-purple-400"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="hover:text-purple-400"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-purple-400"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-purple-400"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p class="text-gray-400">&copy; 2024 Harmony Events. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Countdown Timer
+        
+
+        setInterval(countdown, 1000);
+
+        // Smooth Scroll
+       
+        // Sticky Navigation Shadow
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body>
+</html>
