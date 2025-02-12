@@ -26,9 +26,7 @@ SECRET_KEY = 'django-insecure-cgh&o)nmp)cvw0)62l+d&erin74+-)rclxe5%86fpw)w)s!-s^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'render.com',
-]
+ALLOWED_HOSTS = ['event-management-vvll.onrender.com', '127.0.0.1', 'localhost']
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
