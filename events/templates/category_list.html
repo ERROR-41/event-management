@@ -25,13 +25,13 @@
                 <!-- Name -->
                 <div class="flex items-center justify-start">
                   <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Name:</span>
-                  <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ category.name }}</span>
+                  <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ category.name | capfirst }}</span>
                 </div>
 
                 <!-- Description -->
                 <div class="flex items-start justify-start">
                   <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Description:</span>
-                    <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ category.description|slice:":40" }}...</span>
+                    <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ category.description|slice:":40" | capfirst }}...</span>
                 </div>
 
                 <!-- Actions -->

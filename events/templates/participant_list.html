@@ -27,7 +27,7 @@
                 <!-- Name -->
                 <div class="flex items-center justify-start">
                   <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Name:</span>
-                  <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ participant.name }}</span>
+                  <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ participant.name  | capfirst}}</span>
                 </div>
 
                 <!-- Email -->
@@ -43,7 +43,7 @@
                     {% if participant.events.count > 0 %}
                       {% for event in participant.events.all %}
                         {% if forloop.first %}
-                          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">{{ event.name }}</span>
+                          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">{{ event.name | capfirst }}</span>
                         {% elif forloop.counter == 2 %}
                           <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">+{{ participant.events.count|add:'-1' }} more</span>
                         {% endif %}
