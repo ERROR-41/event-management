@@ -27,13 +27,9 @@ SECRET_KEY = 'django-insecure-cgh&o)nmp)cvw0)62l+d&erin74+-)rclxe5%86fpw)w)s!-s^
 DEBUG = True
 
 ALLOWED_HOSTS = ['event-management-vvll.onrender.com', '127.0.0.1', 'localhost']
-INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    # ...
-]
 
-CSRF_TRUSTED_ORIGINS = [ 'https://*onrender.com', 'http://127.0.0.1:8000']
+
+CSRF_TRUSTED_ORIGINS = [ "https://event-management-vvll.onrender.com", 'http://127.0.0.1:8000']
 
 
 
@@ -49,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "crispy_forms",
     "crispy_tailwind",
-    "debug_toolbar",
+    'corsheaders', 
     'events',    
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
@@ -64,7 +60,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware', 
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
 
