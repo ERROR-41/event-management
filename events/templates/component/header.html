@@ -1,47 +1,38 @@
 <nav class="bg-gray-900 border-b border-gray-700 py-4 h-[12vh] z-10 fixed top-0 left-0 right-0 flex justify-center items-center max-w-full xl:max-w-[89.5vw] px-10 mx-auto">
     <div class="container mx-auto flex justify-center items-center">
-        <a class="md:hidden text-2xl font-bold text-white" href="#">
-            EventManager 
-        </a> 
+        <a class="md:hidden text-2xl font-bold text-white" href="#">EventManager</a>
         <div class="hidden md:flex space-x-4 md:space-x-1.5 text-sm lg:text-lg text-sans font-semibold">
-            <a class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700" href="{% url 'home' %}">
-                Home
-            </a>
+            <a class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 bg-gray-800 hover:bg-gray-700" href="{% url 'home' %}">Home</a>
             <div class="relative group">
-                <button class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700">
-                    Events
-                </button>
-                <div class="absolute left-0 hidden bg-gray-800 text-white rounded-md shadow-lg group-hover:block">
-                    <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'event_create' %}">Create Event</a>
-                    <a class="block px-4 py-2 hover:bg-gray-700" href="#">View Events</a>
+                <button class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 bg-gray-800 hover:bg-gray-700">Events</button>
+                <div class="absolute left-0 hidden bg-gray-800 text-white shadow-lg group-hover:block">
+                    <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'event_create' %}">Create </a>
                 </div>
             </div>
             <div class="relative group">
-                <button class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700">
-                    Participants
-                </button>
-                <div class="absolute left-0 hidden bg-gray-800 text-white rounded-md shadow-lg group-hover:block">
-                    <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'participant_create' %}">Create Participant</a>
-                    <a class="block px-4 py-2 hover:bg-gray-700" href="#">View Participants</a>
+                <button class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 bg-gray-800 hover:bg-gray-700 w-full">Participants</button>
+                <div class="absolute left-0 hidden bg-gray-800 text-white shadow-lg group-hover:block w-full">
+                    <a class="block px-4 py-2 hover:bg-gray-700 w-full" href="{% url 'participant_create' %}">Create</a>
+                    <a class="block px-4 py-2 hover:bg-gray-700 w-full" href="{% url 'participant_list' %}"><i class="fas fa-list"></i> List</a>
                 </div>
             </div>
-            <div class="relative group">
-                <button class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700">
-                    Categories
-                </button>
-                <div class="absolute left-0 hidden bg-gray-800 text-white rounded-md shadow-lg group-hover:block">
-                    <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'category_create' %}">Create Category</a>
-                    <a class="block px-4 py-2 hover:bg-gray-700" href="#">View Categories</a>
-                </div>
-            </div>
-            <a class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700" href="{% url 'dashboard' %}">
-                Dashboard
-            </a>
-        </div>        
 
-        <button class="text-white hover:text-blue-400 ml-auto transition-colors focus:outline-none md:hidden" id="menu-toggle">
-            <i class="fas fa-bars text-3xl"></i>
-        </button>
+            <div class="relative group w-fit">
+                <button class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 bg-gray-800 hover:bg-gray-700 flex items-center"> Categories </i></button>
+                <div class="absolute left-0 hidden text-lg bg-gray-800 text-white shadow-lg group-hover:block w-full">
+                    <a class="block px-4 py-2 hover:bg-gray-700 w-full" href="{% url 'category_create' %}">Create </a>
+                    <a class="block px-4 py-2 hover:bg-gray-700 w-full" href="{% url 'category_list' %}"><i class="fas fa-list"></i> List  </a>
+                </div>
+            </div>
+
+            {% comment %}demo{% endcomment %}
+
+            {% comment %}demo{% endcomment %}
+
+            <a class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 bg-gray-800 hover:bg-gray-700" href="{% url 'dashboard' %}">Dashboard</a>
+        </div>
+
+        <button class="text-white hover:text-blue-400 ml-auto transition-colors focus:outline-none md:hidden" id="menu-toggle"><i class="fas fa-bars text-3xl"></i></button>
     </div>
 </nav>
 
@@ -51,45 +42,35 @@
 
 <div class="md:hidden hidden bg-gray-700" id="mobile-menu">
     <div class="px-2 pt-2 pb-3 space-y-2 sm:px-3 text-start">
-        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 rounded-md text-base font-medium bg-gray-800 hover:bg-gray-700" href="{% url 'home' %}">
-            Home
-        </a>
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-800 hover:bg-gray-700" href="{% url 'home' %}">Home</a>
         <div class="relative group">
-            <button class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 rounded-md text-base font-medium bg-gray-800 hover:bg-gray-700">
-                Events
-            </button>
-            <div class="absolute left-0 hidden bg-gray-800 text-white rounded-md shadow-lg group-hover:block">
-                <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'event_create' %}">Create Event</a>
-                <a class="block px-4 py-2 hover:bg-gray-700" href="#">View Events</a>
+            <button class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-800 hover:bg-gray-700">Events</button>
+            <div class="absolute left-0 hidden bg-gray-800 text-white shadow-lg group-hover:block">
+                <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'event_create' %}">Create </a>
+                <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'dashboard' %}">View</a>
             </div>
         </div>
         <div class="relative group">
-            <button class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 rounded-md text-base font-medium bg-gray-800 hover:bg-gray-700">
-                Participants
-            </button>
-            <div class="absolute left-0 hidden bg-gray-800 text-white rounded-md shadow-lg group-hover:block">
+            <i class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-800 hover:bg-gray-700">Participants</i>
+            <div class="absolute left-0 hidden bg-gray-800 text-white shadow-lg group-hover:block">
                 <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'participant_create' %}">Create Participant</a>
                 <a class="block px-4 py-2 hover:bg-gray-700" href="#">View Participants</a>
             </div>
         </div>
         <div class="relative group">
-            <button class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 rounded-md text-base font-medium bg-gray-800 hover:bg-gray-700">
-                Categories
-            </button>
-            <div class="absolute left-0 hidden bg-gray-800 text-white rounded-md shadow-lg group-hover:block">
-                <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'category_create' %}">Create Category</a>
-                <a class="block px-4 py-2 hover:bg-gray-700" href="#">View Categories</a>
+            <button class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-800 hover:bg-gray-700">Categories</button>
+            <div class="absolute left-0 hidden bg-gray-800 text-white shadow-lg group-hover:block">
+                <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'category_create' %}">Create</a>
+                <a class="block px-4 py-2 hover:bg-gray-700" href="#">list</a>
             </div>
         </div>
-        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 rounded-md text-base font-medium bg-gray-800 hover:bg-gray-700" href="{% url 'dashboard' %}">
-            Dashboard
-        </a>
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-800 hover:bg-gray-700" href="{% url 'dashboard' %}">Dashboard</a>
     </div>
 </div>
 
 <script>
-    document.getElementById('menu-toggle').addEventListener('click', function() {
-        var menu = document.getElementById('mobile-menu');
-        menu.classList.toggle('hidden');
-    });
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+        var menu = document.getElementById('mobile-menu')
+        menu.classList.toggle('hidden')
+    })
 </script>

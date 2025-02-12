@@ -15,11 +15,15 @@ urlpatterns = [
     # category
     path('category/create/', views.category_create, name='category_create'),
     path('category/<int:pk>/edit', views.category_update, name='category_update'),
+    path('category/list', views.category_list, name='category_list'),
+    path('category/<int:pk>/delete/', views.category_delete, name='category_delete'),
     
     
     # participant
     path('participant/create/', views.participant_create, name='participant_create'),
-    path('participant/<int:pk>/', views.participant_update, name='participant_update'),
+    path('participant/<int:pk>/edit', views.participant_update, name='participant_update'),
+    path('participant/<int:pk>/delete/', views.participant_delete, name='participant_delete'),
+    path('participant/list', views.participant_list, name='participant_list'),
     
    
 ]

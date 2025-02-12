@@ -29,6 +29,7 @@ def event_search(request):
 
         return render(request, 'event_search.html', {'form': form, 'events': events})
     except Exception as e:
+        print(f"Error in participant_update: {e}")
         return redirect('error')
 
 def error(request):
@@ -165,12 +166,33 @@ def category_update(request, pk):
             form = CategoryForm(request.POST, instance=category)
             if form.is_valid():
                 form.save()
-                return redirect('dashboard')
+                return redirect('category_list')
         else:
             form = CategoryForm(instance=category)
-        return render(request, 'category_form.html', {'form': form})
+        return render(request, 'category_form.html', {'form': form, 'category': category})
     except Exception as e:
         return redirect('error')
+    
+
+
+def category_list(request):
+    try:
+        categories = Category.objects.all().order_by('id')
+        return render(request, 'category_list.html', {'categories': categories})
+    except Exception as e:
+        return redirect('error')
+    
+def category_delete(request, pk):
+    try:
+        category = get_object_or_404(Category, pk=pk)
+        if request.method == 'POST':
+            category.delete()
+            return redirect('category_list')
+        return render(request, 'category_confirm_delete.html', {'category': category})
+    except Exception as e:
+        return redirect('error')
+
+
 
 # all participant related views
 def participant_create(request):
@@ -179,11 +201,12 @@ def participant_create(request):
             form = ParticipantForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('dashboard')
+                return redirect('participant_list')
         else:
             form = ParticipantForm()
         return render(request, 'participant_form.html', {'form': form})
     except Exception as e:
+        print(f"Error in participant_create: {e}")
         return redirect('error')
 
 def participant_update(request, pk):
@@ -193,9 +216,28 @@ def participant_update(request, pk):
             form = ParticipantForm(request.POST, instance=participant)
             if form.is_valid():
                 form.save()
-                return redirect('dashboard')
+                return redirect('participant_list')
         else:
             form = ParticipantForm(instance=participant)
-        return render(request, 'participant_form.html', {'form': form})
+        return render(request, 'participant_form.html', {'form': form, 'participant': participant})
+    except Exception as e:
+        print(f"Error in participant_update: {e}")
+        return redirect('error')
+
+def participant_delete(request, pk):
+    try:
+        participant = get_object_or_404(Participant, pk=pk)
+        if request.method == 'POST':
+            participant.delete()
+            return redirect('participant_list')
+        return render(request, 'participant_confirm_delete.html', {'participant': participant})
+    except Exception as e:
+        return redirect('error')
+    
+    
+def participant_list(request):
+    try:
+        participants = Participant.objects.all().order_by('id')
+        return render(request, 'participant_list.html', {'participants': participants})
     except Exception as e:
         return redirect('error')

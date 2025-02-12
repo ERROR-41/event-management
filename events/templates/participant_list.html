@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Participant List
+{% endblock %}
+
+{% block content %}
+  <div class="bg-gray-900 font-roboto dark" ">
+    <div class="container mx-auto p-4">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-200 mx-auto">Participant List</h1>
+      </div>
+      {% if participants %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {% for participant in participants %}
+            <div class=" dark:bg-gray-800 rounded-lg  p-6 text-gray-200 
+             bg-gray-800 shadow-lg hover:shadow-2xl hover:text-gray-900 hover:bg-gray-700 bg-opacity-30
+             backdrop-blur-lg border border-gray-700 transform group-hover:scale-105 transition duration-200">
+              <!-- Card Content -->
+              <div class="space-y-3">
+                <!-- ID -->
+                <div class="flex items-center justify-start">
+                  <span class="text-sm font-semibold text-gray-200 dark:text-gray-400">ID:</span>
+                  <span class="text-gray-200 dark:text-gray-300 ml-1">{{ participant.id }}</span>
+                </div>
+
+                <!-- Name -->
+                <div class="flex items-center justify-start">
+                  <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Name:</span>
+                  <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ participant.name }}</span>
+                </div>
+
+                <!-- Email -->
+                <div class="flex items-center justify-start">
+                  <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Email:</span>
+                  <a href="mailto:{{ participant.email }}" class="text-blue-600 dark:text-blue-400 hover:underline truncate ml-1">{{ participant.email }}</a>
+                </div>
+
+                <!-- Events -->
+                <div class="border-t pt-3 mt-3 dark:border-gray-700">
+                  <span class="text-sm font-semibold text-gray-200 dark:text-gray-400 block mb-2">Events:</span>
+                  <div class="flex flex-wrap gap-2">
+                    {% if participant.events.count > 0 %}
+                      {% for event in participant.events.all %}
+                        {% if forloop.first %}
+                          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">{{ event.name }}</span>
+                        {% elif forloop.counter == 2 %}
+                          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">+{{ participant.events.count|add:'-1' }} more</span>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <span class="text-gray-600 dark:text-gray-400">No more events found.</span>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="border-t pt-3 mt-3 dark:border-gray-700">
+                  <div class="flex flex-col space-y-2">
+                    <a href="{% url 'participant_update' participant.id %}" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors flex items-center justify-center">
+                      <i class="fas fa-edit mr-2"></i>
+                      Edit
+                    </a>
+                    <a href="{% url 'participant_delete' participant.id %}" class="w-full bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md transition-colors flex items-center justify-center">
+                      <i class="fas fa-trash mr-2"></i>
+                      Delete
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center py-8">
+          <p class="text-gray-600 dark:text-gray-400 text-lg">No participants found.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
