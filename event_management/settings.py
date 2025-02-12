@@ -26,6 +26,13 @@ SECRET_KEY = 'django-insecure-cgh&o)nmp)cvw0)62l+d&erin74+-)rclxe5%86fpw)w)s!-s^
 DEBUG = True
 
 ALLOWED_HOSTS = []
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
+DEBUG = True
 
 
 # Application definition
@@ -39,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "crispy_forms",
     "crispy_tailwind",
+    "debug_toolbar",
     'events',    
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
@@ -53,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     
 ]
 
@@ -83,7 +92,7 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'event_management',
+        'NAME': 'error41',
         'USER': 'postgres',
         'PASSWORD': 'error',
         'HOST': 'localhost',

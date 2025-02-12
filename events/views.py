@@ -57,9 +57,8 @@ def dashboard(request):
             events = base_events.filter(date=today).order_by('date')
         
         context = {
-            'events': events,
+            'events': events,  
             'total_events': base_events.count(),
-            'categories': Category.objects.all(),
             'total_participants': total_participants,
             'upcoming_events': Event.objects.filter(date__gte=timezone.now()).order_by('date').count(),
             'past_events': Event.objects.filter(date__lt=timezone.now()).order_by('-date').count(),
@@ -93,8 +92,7 @@ def home(request):
         context = {
             'events': events.order_by('id'),
             'form': form,
-            'location_choices': location_coices,
-            
+            'location_choices': location_coices,         
         }
         return render(request, 'home.html', context)
     except Exception as e:
