@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 {% load tailwind_filters %}
+{% block title %}
+  {% if form.instance.pk %}
+    Update Event
+  {% else %}
+    Create Event
+  {% endif %}
+{% endblock %}
+
 {% block content %}
   <div class="w-sm md:w-full max-w-2xl mx-auto sm:px-6 lg:px-8 py-8 mt-8">
     <h1 class="text-4xl font-bold mb-8 text-start">
@@ -13,13 +21,13 @@
       {% csrf_token %}
       <div class="space-y-4">{{ form|crispy }}</div>
       <div class="flex gap-6 items-center mt-4">
-        <a href="{% url 'dashboard' %}" type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-300">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-300">
           {% if form.instance.pk %}
             Update
           {% else %}
             Create
           {% endif %}
-        </a>
+        </button>
         <a href="{% url 'dashboard' %}" class="bg-gray-700 text-gray-200 rounded px-6 py-2 outline-2 transition duration-300">Cancel</a>
       </div>
     </form>

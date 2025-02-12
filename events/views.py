@@ -91,7 +91,7 @@ def home(request):
         # Populate the location choices for the form
     
         context = {
-            'events': events,
+            'events': events.order_by('id'),
             'form': form,
             'location_choices': location_coices,
             
@@ -108,11 +108,15 @@ def event_create(request):
             if form.is_valid():
                 form.save()
                 return redirect('dashboard')
+            else:
+                print(form.errors)  # Log form errors
         else:
             form = EventForm()
         return render(request, 'event_form.html', {'form': form})
     except Exception as e:
+        print(f"Error in event_create: {e}")  # Log the exception
         return redirect('error')
+  
 
 def event_update(request, pk):
     try:
@@ -122,10 +126,13 @@ def event_update(request, pk):
             if form.is_valid():
                 form.save()
                 return redirect('dashboard')
+            else:
+                print(form.errors)  # Log form errors
         else:
             form = EventForm(instance=event)
         return render(request, 'event_form.html', {'form': form})
     except Exception as e:
+        print(f"Error in event_update: {e}")  # Log the exception
         return redirect('error')
 
 def event_delete(request, pk):
@@ -152,7 +159,7 @@ def category_create(request):
             form = CategoryForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('dashboard')
+                return redirect('category_list')
         else:
             form = CategoryForm()
         return render(request, 'category_form.html', {'form': form})
@@ -167,13 +174,15 @@ def category_update(request, pk):
             if form.is_valid():
                 form.save()
                 return redirect('category_list')
+            else:
+                print(form.errors)  # Log form errors
         else:
             form = CategoryForm(instance=category)
         return render(request, 'category_form.html', {'form': form, 'category': category})
     except Exception as e:
+        print(f"Error in category_update: {e}")  # Log the exception
         return redirect('error')
     
-
 
 def category_list(request):
     try:
@@ -191,8 +200,6 @@ def category_delete(request, pk):
         return render(request, 'category_confirm_delete.html', {'category': category})
     except Exception as e:
         return redirect('error')
-
-
 
 # all participant related views
 def participant_create(request):
@@ -217,6 +224,8 @@ def participant_update(request, pk):
             if form.is_valid():
                 form.save()
                 return redirect('participant_list')
+            else:
+                print(form.errors)  # Log form errors
         else:
             form = ParticipantForm(instance=participant)
         return render(request, 'participant_form.html', {'form': form, 'participant': participant})
