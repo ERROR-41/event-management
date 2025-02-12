@@ -19,11 +19,7 @@ class EventForm(forms.ModelForm):
             'time': 'Event Time',
         }
 
-    def clean_date(self):
-        date = self.cleaned_data['date']
-        if date < timezone.now().date():
-            raise ValidationError("Event date cannot be in the past")
-        return date
+   
 
 class ParticipantForm(forms.ModelForm):
     class Meta:
