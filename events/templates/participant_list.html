@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="bg-gray-900 font-roboto dark" ">
+  <div class="bg-gray-900 font-roboto">
     <div class="container mx-auto p-4">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-gray-200 mx-auto">Participant List</h1>
@@ -13,9 +13,7 @@
       {% if participants %}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {% for participant in participants %}
-            <div class=" dark:bg-gray-800 rounded-lg  p-6 text-gray-200 
-             bg-gray-800 shadow-lg hover:shadow-2xl hover:text-gray-900 hover:bg-gray-700 bg-opacity-30
-             backdrop-blur-lg border border-gray-700 transform group-hover:scale-105 transition duration-200">
+            <div class="dark:bg-gray-800 rounded-lg p-6 text-gray-200 bg-gray-800 shadow-lg hover:shadow-2xl hover:text-gray-900 hover:bg-gray-700 bg-opacity-30 backdrop-blur-lg border border-gray-700 transform group-hover:scale-105 transition duration-200">
               <!-- Card Content -->
               <div class="space-y-3">
                 <!-- ID -->
@@ -27,7 +25,7 @@
                 <!-- Name -->
                 <div class="flex items-center justify-start">
                   <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Name:</span>
-                  <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ participant.name  | capfirst}}</span>
+                  <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ participant.name|capfirst }}</span>
                 </div>
 
                 <!-- Email -->
@@ -43,7 +41,7 @@
                     {% if participant.events.count > 0 %}
                       {% for event in participant.events.all %}
                         {% if forloop.first %}
-                          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">{{ event.name | capfirst }}</span>
+                          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">{{ event.name|capfirst }}</span>
                         {% elif forloop.counter == 2 %}
                           <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">+{{ participant.events.count|add:'-1' }} more</span>
                         {% endif %}

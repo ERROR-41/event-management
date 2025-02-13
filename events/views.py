@@ -10,27 +10,6 @@ def error_500(request):
     return render(request, 'error.html', status=500)
 
 # views.py
-def event_search(request):
-    try:
-        events = Event.objects.all()
-        form = EventForm()
-
-        if request.method == 'GET':
-            event_name = request.GET.get('event_name', '')
-            event_location = request.GET.get('event_location', '')
-
-            if event_name:
-                events = events.filter(name__icontains=event_name)
-            if event_location:
-                events = events.filter(location=event_location)
-
-        # Update the choices for the location dropdown
-        form.fields['event_location'].choices = [(event.location, event.location) for event in Event.objects.distinct('location')]
-
-        return render(request, 'event_search.html', {'form': form, 'events': events})
-    except Exception as e:
-        print(f"Error in participant_update: {e}")
-        return redirect('error')
 
 def error(request):
     return render(request, 'error.html')
@@ -92,7 +71,7 @@ def home(request):
         context = {
             'events': events.order_by('id'),
             'form': form,
-            'location_choices': location_coices,         
+            'location_choices': location_coices.distinct('location').values_list('location', flat=True)        
         }
         return render(request, 'home.html', context)
     except Exception as e:
