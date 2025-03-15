@@ -3,6 +3,7 @@ from events.models import Event, Participant, Category
 from events.forms import EventForm, ParticipantForm, CategoryForm
 from django.db.models import Count, Q
 from django.utils import timezone
+from django.db import models
 from django.http import HttpResponseServerError
 
 # Custom error handler
@@ -14,29 +15,15 @@ def error_500(request):
 def error(request):
     return render(request, 'error.html')
 
-def test(request):
-    return render(request, 'test.html')
 
 def dashboard(request):
     try:
         type = request.GET.get('type', 'all')
         base_events = Event.objects.select_related('category').prefetch_related('participants').all()
         total_participants = Participant.objects.aggregate(total=Count('id'))['total']
-        events = base_events  # Initialize events with base_events
-
-        today = timezone.now().date()
-        
-        if type =='total_events':
-            events=base_events
-        elif type == 'upcoming_events':
-            events = base_events.filter(date__gte=timezone.now()).order_by('date')
-        elif type == 'past_events':
-            events = base_events.filter(date__lt=timezone.now()).order_by('-date')
-        else :
-            events = base_events.filter(date=today).order_by('date')
         
         context = {
-            'events': events,  
+            'events': base_events,  
             'total_events': base_events.count(),
             'total_participants': total_participants,
             'upcoming_events': Event.objects.filter(date__gte=timezone.now()).order_by('date').count(),
@@ -44,7 +31,7 @@ def dashboard(request):
             'type': type,
         }
     
-        return render(request, 'dashboard.html', context)
+        return render(request, 'dashboard/dashboard.html', context)
     except Exception as e:
         return redirect('error')
 
@@ -89,7 +76,7 @@ def event_create(request):
                 print(form.errors)  # Log form errors
         else:
             form = EventForm()
-        return render(request, 'event_form.html', {'form': form})
+        return render(request, 'event/event_form.html', {'form': form})
     except Exception as e:
         print(f"Error in event_create: {e}")  # Log the exception
         return redirect('error')
@@ -107,7 +94,7 @@ def event_update(request, pk):
                 print(form.errors)  # Log form errors
         else:
             form = EventForm(instance=event)
-        return render(request, 'event_form.html', {'form': form})
+        return render(request, 'event/event_form.html', {'form': form})
     except Exception as e:
         print(f"Error in event_update: {e}")  # Log the exception
         return redirect('error')
@@ -117,15 +104,15 @@ def event_delete(request, pk):
         event = get_object_or_404(Event, pk=pk)
         if request.method == 'POST':
             event.delete()
-            return redirect('dashboard')
-        return render(request, 'event_confirm_delete.html', {'event': event})
+            return redirect('home')
+        return render(request, 'event/event_confirm_delete.html', {'event': event})
     except Exception as e:
         return redirect('error')
 
 def event_details(request, pk):
     try:
         event = get_object_or_404(Event, pk=pk)
-        return render(request, 'event_details.html', {'event': event})
+        return render(request, 'event/event_details.html', {'event': event})
     except Exception as e:
         return redirect('error')
 
@@ -139,7 +126,7 @@ def category_create(request):
                 return redirect('category_list')
         else:
             form = CategoryForm()
-        return render(request, 'category_form.html', {'form': form})
+        return render(request, 'category/category_form.html', {'form': form})
     except Exception as e:
         return redirect('error')
 
@@ -155,7 +142,7 @@ def category_update(request, pk):
                 print(form.errors)  # Log form errors
         else:
             form = CategoryForm(instance=category)
-        return render(request, 'category_form.html', {'form': form, 'category': category})
+        return render(request, 'category/category_form.html', {'form': form, 'category': category})
     except Exception as e:
         print(f"Error in category_update: {e}")  # Log the exception
         return redirect('error')
@@ -164,7 +151,7 @@ def category_update(request, pk):
 def category_list(request):
     try:
         categories = Category.objects.all().order_by('id')
-        return render(request, 'category_list.html', {'categories': categories})
+        return render(request, 'category/category_list.html', {'categories': categories})
     except Exception as e:
         return redirect('error')
     
@@ -174,7 +161,7 @@ def category_delete(request, pk):
         if request.method == 'POST':
             category.delete()
             return redirect('category_list')
-        return render(request, 'category_confirm_delete.html', {'category': category})
+        return render(request, 'category/category_confirm_delete.html', {'category': category})
     except Exception as e:
         return redirect('error')
 
@@ -188,7 +175,7 @@ def participant_create(request):
                 return redirect('participant_list')
         else:
             form = ParticipantForm()
-        return render(request, 'participant_form.html', {'form': form})
+        return render(request, 'participant/participant_form.html', {'form': form})
     except Exception as e:
         print(f"Error in participant_create: {e}")
         return redirect('error')
@@ -205,7 +192,7 @@ def participant_update(request, pk):
                 print(form.errors)  # Log form errors
         else:
             form = ParticipantForm(instance=participant)
-        return render(request, 'participant_form.html', {'form': form, 'participant': participant})
+        return render(request, 'participant/participant_form.html', {'form': form, 'participant': participant})
     except Exception as e:
         print(f"Error in participant_update: {e}")
         return redirect('error')
@@ -216,14 +203,16 @@ def participant_delete(request, pk):
         if request.method == 'POST':
             participant.delete()
             return redirect('participant_list')
-        return render(request, 'participant_confirm_delete.html', {'participant': participant})
+        return render(request, 'participant/participant_confirm_delete.html', {'participant': participant})
     except Exception as e:
         return redirect('error')
     
     
 def participant_list(request):
     try:
-        participants = Participant.objects.all().order_by('id')
-        return render(request, 'participant_list.html', {'participants': participants})
+        # Optimize with prefetch_related for the many-to-many events relationship
+        # and nested select_related for events -> category
+        participants = Participant.objects.prefetch_related('events').order_by('id')
+        return render(request, 'participant/participant_list.html', {'participants': participants  })
     except Exception as e:
         return redirect('error')

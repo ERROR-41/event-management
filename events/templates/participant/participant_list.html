@@ -35,22 +35,19 @@
                 </div>
 
                 <!-- Events -->
-                <div class="border-t pt-3 mt-3 dark:border-gray-700">
-                  <span class="text-sm font-semibold text-gray-200 dark:text-gray-400 block mb-2">Events:</span>
-                  <div class="flex flex-wrap gap-2">
-                    {% if participant.events.count > 0 %}
-                      {% for event in participant.events.all %}
-                        {% if forloop.first %}
-                          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">{{ event.name|capfirst }}</span>
-                        {% elif forloop.counter == 2 %}
-                          <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-xs">+{{ participant.events.count|add:'-1' }} more</span>
-                        {% endif %}
-                      {% endfor %}
-                    {% else %}
-                      <span class="text-gray-600 dark:text-gray-400">No more events found.</span>
-                    {% endif %}
+               
+                  <!-- Events -->
+                  <div class="flex items-center justify-start">
+                    <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Events:</span>
+                    <div class="ml-1">
+                    {% for event in participant.events.all %}
+                      <span class="text-gray-300 dark:text-gray-200">{{ event.name }}</span>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                      {% if not participant.events.all %}
+                      <span class="text-gray-200 dark:text-gray-200">No Event Found</span>
+                      {% endif %}
+                    </div>
                   </div>
-                </div>
 
                 <!-- Actions -->
                 <div class="border-t pt-3 mt-3 dark:border-gray-700">
