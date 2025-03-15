@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load tailwind_filters %}
+
+{% block title %}
+  Create Group
+{% endblock %}
+
+{% block content %}
+  {% if message %}
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ message }}</span>
+    </div>
+  {% endif %}
+
+  <div class="container md:px-24 mx-auto py-6">
+    <h3 class="text-gray-700 text-3xl font-medium mb-8">Create Group</h3>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create </button>
+    </form>
+  </div>
+{% endblock %}
