@@ -18,23 +18,37 @@
               <div class="space-y-3">
                 <!-- ID -->
                 <div class="flex items-center justify-start">
-                  <span class="text-sm font-semibold text-gray-200 dark:text-gray-400">ID:</span>
+                  <span class=" font-semibold text-gray-200 dark:text-gray-400">ID: </span>
                   <span class="text-gray-200 dark:text-gray-300 ml-1">{{ participant.id }}</span>
                 </div>
 
                 <!-- Name -->
                 <div class="flex items-center justify-start">
-                  <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Name:</span>
-                    <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ participant.first_name|capfirst }} {{ participant.last_name|capfirst }}</span>
+                  <span class=" font-semibold text-gray-300 dark:text-gray-400">Name: </span>
+                  <span class="text-gray-300 dark:text-gray-200 font-semibold ml-1">{{ participant.first_name|capfirst }} {{ participant.last_name|capfirst }}</span>
                 </div>
 
                 <!-- Email -->
                 <div class="flex items-center justify-start">
-                  <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Email:</span>
+                  <span class=" font-semibold text-gray-300 dark:text-gray-400">Email: </span>
                   <a href="mailto:{{ participant.email }}" class="text-blue-600 dark:text-blue-400 hover:underline truncate ml-1">{{ participant.email }}</a>
                 </div>
 
+                <!-- Events -->
                
+                  <!-- Events -->
+                  <div class="flex items-center justify-start">
+                    <span class="text-sm font-semibold text-gray-300 dark:text-gray-400">Events:</span>
+                    <div class="ml-1">
+                    {% for event in participant.events.all %}
+                      <span class="text-gray-300 dark:text-gray-200">{{ event.name }}</span>
+                      {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                      {% if not participant.events.all %}
+                      <span class="text-gray-200 dark:text-gray-200">No Event Fond</span>
+                      {% endif %}
+                    </div>
+                  </div>
 
                 <!-- Actions -->
                 <div class="border-t pt-3 mt-3 dark:border-gray-700">

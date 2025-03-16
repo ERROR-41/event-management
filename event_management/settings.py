@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,7 +52,8 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_tailwind",
     'corsheaders', 
-    'events',    
+    'events',
+    'users',    
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
@@ -90,6 +92,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.user_roles',
             ],
         },
     },
@@ -101,11 +104,22 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgresql://event_management_db_59gw_user:R9fGZJGABN4M6NiKNHqbCTFpk2kTanKu@dpg-cumh1g3qf0us73cjoveg-a.oregon-postgres.render.com/event_management_db_59gw',
+#         conn_max_age=600
+#     )	
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://event_management_db_59gw_user:R9fGZJGABN4M6NiKNHqbCTFpk2kTanKu@dpg-cumh1g3qf0us73cjoveg-a.oregon-postgres.render.com/event_management_db_59gw',
-        conn_max_age=600
-    )	
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'event_management',
+        'USER': 'postgres',
+        'PASSWORD': 'error',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 # Password validation
@@ -153,3 +167,21 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+FRONTEND_URL = 'http://127.0.0.1:8000/'
+
+# sending email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'digitalproduct.shop29@gmail.com' 
+EMAIL_HOST_PASSWORD = 'iyrk bbwh gpml ajcz'
+
+LOGIN_URL = '/users/sign-in/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/users/sign-in/'

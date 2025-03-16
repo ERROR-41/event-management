@@ -6,6 +6,7 @@ urlpatterns = [
     
     path('', views.home, name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/', views.organizer_dashboard, name='organizer_dashboard'),
     path('error/', views.error, name='error'),
     path('events/create/', views.event_create, name='event_create'),
     path('events/<int:pk>/edit', views.event_update, name='event_update'),
@@ -20,12 +21,10 @@ urlpatterns = [
     
     
     # participant
-    path('participant/create/', views.participant_create, name='participant_create'),
     path('participant/<int:pk>/edit', views.participant_update, name='participant_update'),
     path('participant/<int:pk>/delete/', views.participant_delete, name='participant_delete'),
     path('participant/list', views.participant_list, name='participant_list'),
     
    
 ]
-
 handler500 = 'events.views.error_500'

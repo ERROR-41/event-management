@@ -14,6 +14,7 @@ def is_admin(user):
    return user.groups.filter(name='Admin').exists()
 
 
+
 def sign_up(request):
   form = User_RegistrationForm()
   if request.method == "POST":
@@ -72,7 +73,8 @@ def activate_user(request, user_id, token):
 @user_passes_test(is_admin, login_url='sign_in')
 def admin_dashboard(request):
     users = User.objects.all()
-    return render(request, 'admin/admin_dashboard.html',{'users':users})
+    
+    return render(request, 'admin/admin_dashboard.html',{'users':users })
 
 @login_required
 @user_passes_test(is_admin, login_url='sign_in')
@@ -99,12 +101,24 @@ def create_group(request):
           group = form.save()
           messages.success(request, f'{group.name} has been created successfully') 
           return redirect('create-group')   
-    return render(request, 'admin/create_group.html', {'form': form})        
+    return render(request, 'admin/create_group.html', {'form': form})
+
+def update_group(request, group_id):
+    group = Group.objects.get(id=group_id)
+    form = createGroupForm(instance=group)
+    if request.method == 'POST':
+        form = createGroupForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'{group.name} has been updated successfully')
+            return redirect('group_list')
+    return render(request, 'admin/create_group.html', {'form': form, 'group': group})
+        
 
 @login_required
 @user_passes_test(is_admin, login_url='sign_in')
 def group_list(request):
-    groups = Group.objects.all()
+    groups = Group.objects.only('id', 'name').prefetch_related('permissions')
     return render(request, 'admin/group_list.html', {'groups': groups})
 
 
