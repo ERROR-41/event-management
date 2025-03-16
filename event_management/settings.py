@@ -28,10 +28,10 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['event-management-vvll.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ["https://*.onrender.com", '127.0.0.1', 'localhost']
 
 
-CSRF_TRUSTED_ORIGINS = [ "https://event-management-vvll.onrender.com", 'http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = [ "https://*.onrender.com", 'http://127.0.0.1:8000']
 
 INTERNAL_IPS = [
     # ...
