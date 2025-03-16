@@ -1,0 +1,22 @@
+{% extends 'registration/base_registration.html' %}
+
+{% load crispy_forms_tags %}
+{% block title %}
+  Sign In
+{% endblock %}
+
+{% block content %}
+  <div class="bg-gray-100 min-h-screen flex flex-col items-center justify-center sm:py-12">
+    <div class="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
+      <h2 class="text-3xl font-bold text-center mb-6 text-blue-600">Log In to Your Account</h2>
+      <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="w-full bg-blue-600 text-white py-3 mt-6 rounded font-bold hover:bg-blue-700 transition duration-200">Sign In</button>
+      </form>
+      <p class="text-center text-gray-500 text-sm mt-4">
+        Don't have an account? <a href="{% url 'sign_up' %}" class="text-blue-600 hover:underline">Sign Up</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}

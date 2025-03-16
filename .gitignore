@@ -12,7 +12,8 @@ node_modules/
 
 # Backup files # ls
 *.bak 
-
+.env
+env/
 # If you are using PyCharm # 
 # User-specific stuff
 .idea/**/workspace.xml

@@ -1,4 +1,5 @@
 {% extends 'base.html' %} 
+{% load static %}
 
 {% block title %}
   Dashboard
@@ -8,7 +9,6 @@
 
   <!-- Main Content -->
 
-{% comment %} stat grid  {% endcomment %}
 
  <div class="bg-gray-900  p-6  rounded-b-2xl mx-auto my-auto scroll-smooth mt-2 ">
   <div class="container mx-auto ">
@@ -32,7 +32,7 @@
   
     
     {% comment %} ##total event {% endcomment %}
-    <a href="{% url 'dashboard' %}?type=total_events">
+    <a href="{% url 'organizer_dashboard' %}?type=total_events">
     <div class="p-6 rounded-lg bg-gray-800 shadow-lg hover:shadow-2xl transition-shadow 
     duration-300 bg-opacity-30 backdrop-blur-lg border border-gray-700 text-white
     hover:text-gray-800  hover:bg-gray-100 ">
@@ -48,7 +48,7 @@
 
 
     {% comment %} ##upcoming event {% endcomment %}
-    <a href="{% url 'dashboard' %}?type=upcoming_events">
+    <a href="{% url 'organizer_dashboard' %}?type=upcoming_events">
     <div class="p-6 rounded-lg bg-gray-800 shadow-lg hover:shadow-2xl transition-shadow 
     duration-300 bg-opacity-30  backdrop-blur-lg border border-gray-700 text-white
     hover:text-gray-800  hover:bg-gray-100">
@@ -62,7 +62,7 @@
    </a>
 
     {% comment %} ##past event {% endcomment %}
-    <a href="{% url 'dashboard' %}?type=past_events">
+    <a href="{% url 'organizer_dashboard' %}?type=past_events">
     <div class="p-6 rounded-lg bg-gray-800 shadow-lg hover:shadow-2xl transition-shadow 
     duration-300 bg-opacity-30 backdrop-blur-lg border border-gray-700
      text-white hover:text-gray-800  hover:bg-gray-100">
@@ -116,13 +116,11 @@
         <div class="p-5 rounded-lg bg-gray-800 shadow-lg hover:shadow-md  hover:shadow-blue-400   hover:bg-gray-700 
           bg-opacity-30 backdrop-blur-lg border border-gray-700
          transform group-hover:scale-105 transition duration-500">
-        <img
-          alt="Random event image"
-          class="w-full h-48 rounded-lg mb-4 object-cover"
-          height="400"
-          src="https://storage.googleapis.com/a1aa/image/TF7EN2O9N_lxRwTv2twIeFSUTMEQex1N4zUOLaZj3Rk.jpg"
-          width="600"
-        />
+        {% if event.image %}
+              <img alt="Random event image" class="w-full border border-gray-50 h-48 rounded-lg mb-4 object-cover" height="400" src="{{ event.image.url }}" width="600" />
+            {% else %}
+              <img alt="Random event image" class="w-full border border-gray-50 h-48 rounded-lg mb-4 object-cover" height="400" src="{% static 'images/default.jpg' %}" width="600" />
+            {% endif %}
         <div class="mb-4">
             <h3 class="text-xl font-bold text-white">{{ event|truncatechars:25| capfirst  }}</h3>
         </div>
