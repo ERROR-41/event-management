@@ -4,7 +4,7 @@
     <a class="text-xl md:text-2xl font-bold text-white" href="{% url 'home' %}">Eventify</a>
 
     <!-- Desktop Navigation Links - hidden on mobile -->
-    <div class="hidden lg:flex items-center lg:space-x-1 xl:space-x-4  xl:text-base lg:text-sm text-sans font-semibold">
+    <div class="hidden lg:flex items-center lg:space-x-1 xl:space-x-4 xl:text-base lg:text-sm text-sans font-semibold">
       <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'home' %}">Home</a>
 
       <!-- Events Dropdown -->
@@ -51,7 +51,7 @@
       {% endif %}
 
       <!-- Admin menu -->
-      {% if 'Admin' in user_roles or 'Organizer' in user_roles %}
+      {% if 'Admin' in user_roles %}
         <div class="relative group">
           <button class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded flex items-center">
             Admin Menu<svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -65,7 +65,15 @@
         </div>
       {% endif %}
 
-      <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'dashboard' %}">Dashboard</a>
+      {% if 'Admin' in user_roles %}
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">RSVP Dashboard</a>
+      {% elif 'Organizer' in user_roles %}
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'organizer_dashboard' %}">Organizer Dashboard</a>
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">RSVP Dashboard</a>
+      {% else %}
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">Participant Dashboard</a>
+      {% endif %}
     </div>
 
     <!-- Right side controls -->
@@ -73,24 +81,24 @@
       <!-- Profile Menu - On all screens -->
       <div class="relative group">
         <button class="relative text-white hover:text-blue-400 transition-colors duration-300 p-2 bg-gray-800 hover:bg-gray-700 rounded-full">
-          <span class="absolute   w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900 -top-1 -end-1"></span>
+          <span class="absolute w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900 -top-1 -end-1"></span>
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
           </svg>
         </button>
-        <div class="absolute right-0 hidden bg-gray-800 text-white shadow-lg group-hover:block rounded-b min-w-[120px] z-10">
+        <div class="absolute right-0 hidden bg-gray-800 text-white shadow-lg group-hover:block rounded-b min-w-[130px] z-10">
           <p class="block px-4 py-2 w-full max-w-48 hover:bg-gray-700">
             {{ user.first_name }} {{ user.last_name }} <br /><span>
               {% if 'Admin' in user_roles %}
                 (Admin)
               {% elif 'Organizer' in user_roles %}
-                ( Organizer )
+                (Organizer)
               {% else %}
-                ( Participant )
+                (Participant)
               {% endif %}
             </span>
           </p>
-          <hr>
+          <hr />
           <form method="post" action="{% url 'sign_out' %}">
             {% csrf_token %}
             <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400">Logout <i class="bg-white fa-solid fa-right-from-bracket"></i></button>
@@ -123,44 +131,47 @@
       <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'home' %}">Home</a>
 
       <!-- Events Submenu -->
-
-      <div class="group">
-        <div class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded flex justify-between items-center cursor-pointer" id="events-toggle">
-          Events<svg class="w-4 h-4 ml-1 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
+      {% if 'Admin' in user_roles or 'Organizer' in user_roles %}
+        <div class="group">
+          <div class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded flex justify-between items-center cursor-pointer" id="events-toggle">
+            Events<svg class="w-4 h-4 ml-1 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          <div class="ml-4 mt-2 space-y-2 hidden" id="events-dropdown">
+            <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded" href="{% url 'event_create' %}">Create Event</a>
+          </div>
         </div>
-        <div class="ml-4 mt-2 space-y-2 hidden" id="events-dropdown">
-          <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded" href="{% url 'event_create' %}">Create Event</a>
-        </div>
-      </div>
+      {% endif %}
 
       <!-- Participants Submenu -->
-
-      <div class="group">
-        <div class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded flex justify-between items-center cursor-pointer" id="participants-toggle">
-          Participants<svg class="w-4 h-4 ml-1 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
+      {% if 'Admin' in user_roles %}
+        <div class="group">
+          <div class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded flex justify-between items-center cursor-pointer" id="participants-toggle">
+            Participants<svg class="w-4 h-4 ml-1 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          <div class="ml-4 mt-2 space-y-2 hidden" id="participants-dropdown">
+            <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded" href="{% url 'participant_list' %}">Participant List</a>
+          </div>
         </div>
-        <div class="ml-4 mt-2 space-y-2 hidden" id="participants-dropdown">
-          <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded" href="{% url 'participant_list' %}">Participant List</a>
-        </div>
-      </div>
+      {% endif %}
 
       <!-- Categories Submenu -->
-
-      <div class="group">
-        <div class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded flex justify-between items-center cursor-pointer" id="categories-toggle">
-          Categories<svg class="w-4 h-4 ml-1 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
+      {% if 'Admin' in user_roles or 'Organizer' in user_roles %}
+        <div class="group">
+          <div class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded flex justify-between items-center cursor-pointer" id="categories-toggle">
+            Categories<svg class="w-4 h-4 ml-1 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          <div class="ml-4 mt-2 space-y-2 hidden" id="categories-dropdown">
+            <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded" href="{% url 'category_create' %}">Create Category</a>
+            <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded" href="{% url 'category_list' %}">Category List</a>
+          </div>
         </div>
-        <div class="ml-4 mt-2 space-y-2 hidden" id="categories-dropdown">
-          <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded" href="{% url 'category_create' %}">Create Category</a>
-          <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded" href="{% url 'category_list' %}">Category List</a>
-        </div>
-      </div>
+      {% endif %}
 
       <!-- Admin menu -->
       {% if 'Admin' in user_roles %}
@@ -177,7 +188,15 @@
         </div>
       {% endif %}
 
-      <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'dashboard' %}">Dashboard</a>
+      {% if 'Admin' in user_roles %}
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">RSVP Dashboard</a>
+      {% elif 'Organizer' in user_roles %}
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">Participant Dashboard</a>
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'organizer_dashboard' %}">Organizer Dashboard</a>
+      {% elif 'Participant' in user_roles %}
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">Participant Dashboard</a>
+      {% endif %}
 
       <form method="post" action="{% url 'sign_out' %}" class="block">
         {% csrf_token %}
@@ -222,18 +241,42 @@
       }
     })
   
-    // Toggle dropdowns
-    document.getElementById('events-toggle').addEventListener('click', function () {
-      document.getElementById('events-dropdown').classList.toggle('hidden')
-    })
-    document.getElementById('participants-toggle').addEventListener('click', function () {
-      document.getElementById('participants-dropdown').classList.toggle('hidden')
-    })
-    document.getElementById('categories-toggle').addEventListener('click', function () {
-      document.getElementById('categories-dropdown').classList.toggle('hidden')
-    })
-    document.getElementById('admin-toggle').addEventListener('click', function () {
-      document.getElementById('admin-dropdown').classList.toggle('hidden')
-    })
+    // Toggle dropdowns with element existence check
+    const eventsToggle = document.getElementById('events-toggle')
+    if (eventsToggle) {
+      eventsToggle.addEventListener('click', function () {
+        const eventsDropdown = document.getElementById('events-dropdown')
+        if (eventsDropdown) {
+          eventsDropdown.classList.toggle('hidden')
+        }
+      })
+    }
+    const participantsToggle = document.getElementById('participants-toggle')
+    if (participantsToggle) {
+      participantsToggle.addEventListener('click', function () {
+        const participantsDropdown = document.getElementById('participants-dropdown')
+        if (participantsDropdown) {
+          participantsDropdown.classList.toggle('hidden')
+        }
+      })
+    }
+    const categoriesToggle = document.getElementById('categories-toggle')
+    if (categoriesToggle) {
+      categoriesToggle.addEventListener('click', function () {
+        const categoriesDropdown = document.getElementById('categories-dropdown')
+        if (categoriesDropdown) {
+          categoriesDropdown.classList.toggle('hidden')
+        }
+      })
+    }
+    const adminToggle = document.getElementById('admin-toggle')
+    if (adminToggle) {
+      adminToggle.addEventListener('click', function () {
+        const adminDropdown = document.getElementById('admin-dropdown')
+        if (adminDropdown) {
+          adminDropdown.classList.toggle('hidden')
+        }
+      })
+    }
   })
 </script>

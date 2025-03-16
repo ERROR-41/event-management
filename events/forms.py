@@ -1,6 +1,6 @@
 # forms.py
 from django import forms
-from .models import Event, Category
+from .models import Event, Category, RSVP
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
@@ -35,4 +35,24 @@ class CategoryForm(forms.ModelForm):
             'name': 'Category Name',
         }
 
+class RSVPForm(forms.ModelForm):
+    class Meta:
+        model = RSVP
+        fields = ['response']  # Only the response field is needed for the form
+        widgets = {
+            'response': forms.CheckboxInput(attrs={
+                'required': True,
+                'class': 'checkbox-helper'
+            }),
+        }
+        labels = {
+            'response': 'Will you attend?',
+        }
+        help_texts = {
+            'response': 'Tick the box if you plan to attend the event.',
+        }
 
+    def __init__(self, *args, **kwargs):
+        super(RSVPForm, self).__init__(*args, **kwargs)
+        self.fields['response'].required = True
+    

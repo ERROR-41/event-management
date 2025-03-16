@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from events.models import Event, Category
-from events.forms import EventForm, CategoryForm
+from events.models import Event, Category, RSVP
+from events.forms import EventForm, CategoryForm, RSVPForm
 from django.db.models import Count, Q
 from django.utils.timezone import now
 from django.contrib.auth.models import User as Participant
 from django.contrib.auth.models import User
 from users.forms import User_EditForm
 from django.contrib.auth.decorators import login_required , user_passes_test
+from django.contrib import messages
 
 
 
@@ -22,17 +23,14 @@ def error(request):
 def test(request):
     return render(request, 'nav.html')
 
-def is_organizer(user):
-    return user.groups.filter(name='Organizer').exists()
-
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
 
-def is_participant(user):
-    return user.groups.filter(name='Participant').exists()
-
 def is_admin_or_organizer(user):
     return user.groups.filter(name__in=['Admin', 'Organizer']).exists()
+
+def is_all_roles(user):
+    return user.groups.filter(name__in=['Admin', 'Organizer', 'Participant']).exists()
 
 @user_passes_test(is_admin_or_organizer)
 @login_required
@@ -44,9 +42,11 @@ def organizer_dashboard(request):
     base_events = Event.objects.select_related('category').all()
     
     # Precompute counts for events and participants
-    total_participants = Participant.objects.aggregate(total=Count('id'))['total']
+    total_participants = User.objects.count()
     total_events = base_events.count()
     today = now().date()
+    date_now = base_events.filter(date__lt=now())
+    
     
     # Determine the events to display based on the type
     if type == 'total_events':
@@ -54,13 +54,13 @@ def organizer_dashboard(request):
     elif type == 'upcoming_events':
         events = base_events.filter(date__gte=now()).order_by('date')
     elif type == 'past_events':
-        events = base_events.filter(date__lt=now()).order_by('-date')
+        events = date_now.order_by('-date')
     else:  # Default: events happening today
         events = base_events.filter(date=today).order_by('date')
 
     # Precompute upcoming and past event counts (avoid redundant queries)
     upcoming_events_count = base_events.filter(date__gte=now()).count()
-    past_events_count = base_events.filter(date__lt=now()).count()
+    past_events_count = date_now.count()
 
 
     # Prepare the context for rendering
@@ -79,7 +79,7 @@ def organizer_dashboard(request):
 
 @login_required
 def home(request):
-    events = Event.objects.select_related('category').all()
+    events = Event.objects.select_related('category').prefetch_related('user_event').all()
     form = EventForm()
     location_coices = events
     
@@ -142,8 +142,9 @@ def event_delete(request, pk):
         return redirect('home')
     return render(request, 'event/event_confirm_delete.html', {'event': event})
 
-@user_passes_test(is_admin_or_organizer)
+
 @login_required
+@user_passes_test(is_all_roles)
 def event_details(request, pk):
     event = get_object_or_404(Event, pk=pk)
     return render(request, 'event/event_details.html', {'event': event})
@@ -205,24 +206,6 @@ def category_delete(request, pk):
 #         form = ParticipantForm()
 #     return render(request, 'participant/participant_form.html', {'form': form})
 
-
-@login_required
-@user_passes_test(is_admin)
-def participant_update(request, pk):
-    participant = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        form = User_EditForm(request.POST, instance=participant)
-        if form.is_valid():
-            form.save()
-            return redirect('participant_list')
-        else:
-            print(form.errors)  # Log form errors
-    else:
-        form = User_EditForm(instance=participant)
-    return render(request, 'participant/participant_form.html', {'form': form, 'participant': participant})
-
-
-
 @login_required
 @user_passes_test(is_admin)
 def participant_delete(request, pk):
@@ -240,13 +223,64 @@ def participant_list(request):
     return render(request, 'participant/participant_list.html', {'participants': user})
 
 @login_required
-def dashboard(request):
-    if is_admin(request.user):
-        return redirect('admin_dashboard')
-    elif is_organizer(request.user):
-        return redirect('organizer_dashboard')
-    elif is_participant(request.user):
-        return redirect('organizer_dashboard')
-    
-    return redirect('error')
-    
+@user_passes_test(is_admin)
+def participant_update(request, pk):
+    participant = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = User_EditForm(request.POST, instance=participant)
+        if form.is_valid():
+            form.save()
+            return redirect('participant_list')
+        else:
+            print(form.errors)  # Log form errors
+    else:
+        form = User_EditForm(instance=participant)
+    return render(request, 'participant/participant_form.html', {'form': form, 'participant': participant})
+
+# all rsvp related views
+@login_required
+def create_rsvp(request, event_id):
+    # Get the event or return 404 if it doesn't exist
+    event = get_object_or_404(Event, id=event_id)
+
+    # Try to fetch the RSVP object if it exists
+    try:
+        rsvp = RSVP.objects.get(user=request.user, event=event)
+    except RSVP.DoesNotExist:
+        rsvp = None
+
+    # Handle POST request
+    if request.method == 'POST':
+        # If RSVP exists, bind the form to the existing instance; otherwise, create a new one
+        form = RSVPForm(request.POST, instance=rsvp)
+        if form.is_valid():
+            rsvp = form.save(commit=False)
+            rsvp.user = request.user  # Ensure the user is set
+            rsvp.event = event  # Ensure the event is set
+            rsvp.save()
+            messages.success(request, f"Your RSVP for '{event.name}' has been updated!")
+            return redirect('home')  # Redirect to the home page (or any relevant page)
+    else:
+        # Prefill the form with the existing RSVP data if it exists
+        form = RSVPForm(instance=rsvp)
+
+    # Render the RSVP form template
+    return render(request, 'rsvp/rsvp_form.html', {'form': form, 'event': event})
+
+@login_required
+def delete_rsvp(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    rsvp = get_object_or_404(RSVP, user=request.user, event=event)
+    if request.method == 'POST':
+        rsvp.delete()
+        return redirect('participant_dashboard')
+    return render(request, 'rsvp/rsvp_confirm_delete.html', {'rsvp': rsvp})
+
+@login_required
+def rsvp_list(request):
+    # Get the event or return a 404 if it doesn't exist
+    rsvp_list = RSVP.objects.filter(user=request.user).select_related('event').order_by('-created_at').all()
+    context = {
+        'user_rsvp': rsvp_list,
+    }
+    return render(request, 'participant/participant_dashboard.html', context)

@@ -2,21 +2,19 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
-from .models import EventRSVP
+from events.models import RSVP
 from django.conf import settings
 
-@receiver(post_save, sender=EventRSVP)
+@receiver(post_save, sender=RSVP)
 def send_rsvp_confirmation(sender, instance, created, **kwargs):
-    if created:  # Only send email when a new RSVP is created
-        attendance_status = "attending" if instance.attending else "not attending"
-        
+    if created:  # Only send email when a new RSVP is created     
         subject = f'RSVP Confirmation for "{instance.event.name}" '
         message = f"""
         Dear ,{instance.user.first_name} {instance.user.last_name},
         
         Thank you for your RSVP to {instance.event.name}!
         
-        You have confirmed that you are {attendance_status} the event on {instance.event.date.strftime('%B %d, %Y at %I:%M %p')}.
+        You have confirmed that you are Attending the event on {instance.event.date.strftime('%B %d, %Y at %I:%M %p')}.
         
         Event details:
         Location: {instance.event.location}

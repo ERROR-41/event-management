@@ -18,30 +18,5 @@
         Don't have an account? <a href="{% url 'sign_up' %}" class="text-blue-600 hover:underline">Sign Up</a>
       </p>
     </div>
-    {% if messages %}
-      <div class="mb-4 max-w-lg mx-auto">
-        {% for message in messages %}
-          {% if message.tags == 'success' %}
-            <div class="bg-gradient-to-r from-green-400 mt-6 to-blue-500 border-l-4 border-green-500 shadow-lg rounded-lg px-5 py-4 mb-4 transition-all duration-500 transform hover:scale-105 animate-pulse" role="alert" id="success-message">
-              <div class="flex items-center">
-              <svg class="h-6 w-6 text-white mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span class="text-white font-medium">{{ message }}</span>
-              </div>  
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-      <script>
-        setTimeout(function () {
-          var successMessage = document.getElementById('success-message')
-          if (successMessage) {
-            successMessage.style.display = 'none'
-          }
-        }, 5000)
-      </script>
-    {% endif %}
   </div>
 {% endblock %}
