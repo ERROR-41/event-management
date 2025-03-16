@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load tailwind_filters %}
 
 {% block title %}
   {% if form.instance.pk %}Update Participants{% else %}Create Participants{% endif %}
 {% endblock title %}
   
-{% load tailwind_filters %}
+
 {% block content %}
 <div class="w-sm md:w-full  max-w-2xl  mx-auto sm:px-6 lg:px-8 py-8 mt-8 ">
   <h1 class="text-4xl font-bold mb-8 text-start">

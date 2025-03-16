@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import dj_database_url
+import os
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,15 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cgh&o)nmp)cvw0)62l+d&erin74+-)rclxe5%86fpw)w)s!-s^'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+ALLOWED_HOSTS = ["https://*.onrender.com", '127.0.0.1', 'localhost']
 
 
-ALLOWED_HOSTS = [ '127.0.0.1', 'localhost']
+CSRF_TRUSTED_ORIGINS = [ "https://*.onrender.com", 'http://127.0.0.1:8000']
 
-
-CSRF_TRUSTED_ORIGINS = [ 'http://127.0.0.1:8000']
 
 INTERNAL_IPS = [
     # ...
@@ -51,7 +54,8 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_tailwind",
     'corsheaders', 
-    'events',    
+    'events',
+    'users',    
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
@@ -90,6 +94,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.user_roles',
             ],
         },
     },
@@ -109,13 +114,13 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 # }
 
 DATABASES = {
-    'default':{
-        "ENGINE": 'django.db.backends.postgresql',
-        "NAME": 'event_management',
-        "USER": 'postgres',
-        "PASSWORD": 'error',
-        "HOST": 'localhost',
-        "PORT": '5432',
+    'default': {
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
     }
 }
 
@@ -147,8 +152,6 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
  
-DEBUG = True
- 
 USE_TZ = True
 
 
@@ -164,3 +167,21 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+FRONTEND_URL = config('FRONTEND_URL')
+
+# sending email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+LOGIN_URL = '/users/sign-in/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/users/sign-in/'
