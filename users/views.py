@@ -8,6 +8,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator
 from users.forms import AssignRoleForm, createGroupForm
 from django.views.decorators.http import require_GET
+import time
 
 
 def is_admin(user):
@@ -24,6 +25,7 @@ def sign_up(request):
       user.set_password(form.cleaned_data.get('password1'))
       user.is_active = False
       user.save()
+      time.sleep(0.5) 
       messages.success(request, 'A confirmation email has been sent to your email address. Please click on the link to activate your account.')
       return redirect('sign_in')
   return render(request, 'registration/registration.html', {'form': form})
@@ -37,6 +39,8 @@ def sign_in(request):
       user = form.get_user()
       if user is not None and user.is_authenticated:
         login(request,user)
+        messages.success(request, 'Login Sucessfully')
+        time.sleep(0.5)  
         return redirect('home')
       else:
         messages.error(request, 'Please Enter Correct Username and Password')
@@ -88,7 +92,7 @@ def assign_role(request, user_id):
             user.groups.clear()
             user.groups.add(role)
             messages.success(request, f'{user.username} role has been updated to {role.name}')
-            return redirect('admin-dashboard')   
+            return redirect('admin_dashboard')   
     return render(request, 'admin/assign_role.html', {'form': form, 'user': user})
 
 @login_required

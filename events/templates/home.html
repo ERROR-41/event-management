@@ -72,12 +72,13 @@
             <!-- Event Details -->
             <div class="mb-4">
               <h3 class="text-xl font-bold text-white truncate">
-                {{ event.name|capfirst }}
+                {{ event.name|capfirst  }}
                 {% if event.user_event.count %}
                   <span class="inline-flex items-center justify-center text-xl font-semibold text-green-400"><i class="fas fa-check-circle text-green-400"></i></span>
                 {% endif %}
               </h3>
             </div>
+
             <p class="text-gray-400 mb-2 flex items-center">
               <i class="far fa-calendar-alt mr-2 text-blue-400"></i>
               {{ event.date }} at {{ event.time }}
@@ -88,7 +89,7 @@
             </p>
             <p class="text-gray-400 mb-2 flex items-center">
               <i class="fas fa-tag mr-2 text-blue-400"></i>
-              Category: {{ event.category.name|capfirst }}
+              Category: {{ event.category.name|capfirst|truncatechars:20 }}
             </p>
 
             <!-- RSVP Status -->
@@ -122,7 +123,7 @@
                 </div>
               {% elif 'Participant' in user_roles %}
                 <div class="flex space-x-2">
-                  <a class="text-white bg-green-600 hover:bg-green-700 transition-colors duration-300 px-5 py-2 rounded-lg" href="{% url 'create_rsvp' event.id %}">Add RSVP</a>
+                  <a class="text-white bg-green-600 hover:bg-green-700 transition-colors duration-300 px-6 py-2 text-base rounded-lg" href="{% url 'create_rsvp' event.id %}">Add RSVP</a>
                 </div>
               {% endif %}
             </div>

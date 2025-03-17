@@ -6,9 +6,36 @@
 {% endblock %}
 
 {% block content %}
+{% if messages %}
+        <div class="w-full mb-6 mx-auto" id="message-container">
+          {% for message in messages %}
+            <div class="p-3 mb-2 rounded-lg shadow-md flex items-center {% if message.tags == 'error' %}
+          bg-red-100 text-red-700 border-l-4 border-red-500
+              {% elif message.tags == 'success' %}
+          bg-green-100 text-green-700 border-l-4 border-green-500
+              {% else %}
+          bg-blue-100 text-blue-700 border-l-4 border-blue-500
+              {% endif %}">
+              <span class="flex-1">{{ message }}</span>
+            </div>
+          {% endfor %}
+        </div>
+        <script>
+          setTimeout(function () {
+            var messageContainer = document.getElementById('message-container')
+            if (messageContainer) {
+              messageContainer.style.display = 'none'
+            }
+          }, 3000)
+        </script>
+      {% endif %}
+
   <div class="bg-gray-100 min-h-screen flex flex-col items-center justify-center sm:py-10">
     <div class="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
       <h2 class="text-3xl font-bold text-center mb-6 text-blue-600">Log In to Your Account</h2>
+
+      
+
       <form method="POST">
         {% csrf_token %}
         {{ form|crispy }}
