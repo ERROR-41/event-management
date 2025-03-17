@@ -62,13 +62,11 @@
 
             <!-- Event Image -->
             <div class="overflow-hidden rounded-lg mb-4">
-              <img alt="Event image"
-                class="w-full h-48 object-cover"
-                src="{% if event.image %}
-                  {{ event.image.url }}
-                {% else %}
-                  {% static 'images/default.jpg' %}
-                {% endif %}" />
+              {% if event.image %}
+                <img alt="event image" class="w-full border border-gray-50 h-48 rounded-lg mb-4 object-cover" height="400" src="{{ event.image.url }}" width="600" />
+              {% else %}
+                <img alt="event image" class="w-full border border-gray-50 h-48 rounded-lg mb-4 object-cover" height="400" src="{% static 'images/default.jpg' %}" width="600" />
+              {% endif %}
             </div>
 
             <!-- Event Details -->
@@ -113,16 +111,11 @@
 
               {% if 'Organizer' in user_roles or 'Admin' in user_roles %}
                 <div class="flex space-x-4">
-                {% if request.user in event.user_event.all %}
-                  <a class="text-blue-400 cursor-not-allowed opacity-50 transition-colors duration-300" href="javascript:void(0)" title="You have already RSVPed">
-                    <i class="fas fa-regular fa-calendar-check text-2xl"></i>
-                  </a>
-                {% else %}
-                  <a class="text-blue-400 hover:text-gray-50 transition-colors duration-300" href="{% url 'create_rsvp' event.id %}" title="Add RSVP">
-                    <i class="fas fa-regular fa-calendar-check text-2xl"></i>
-                  </a>
-                {% endif %}
-
+                  {% if request.user in event.user_event.all %}
+                    <a class="text-blue-400 cursor-not-allowed opacity-50 transition-colors duration-300" href="javascript:void(0)" title="You have already RSVPed"><i class="fas fa-regular fa-calendar-check text-2xl"></i></a>
+                  {% else %}
+                    <a class="text-blue-400 hover:text-gray-50 transition-colors duration-300" href="{% url 'create_rsvp' event.id %}" title="Add RSVP"><i class="fas fa-regular fa-calendar-check text-2xl"></i></a>
+                  {% endif %}
 
                   <a class="text-blue-400 hover:text-blue-600 transition-colors duration-300" href="{% url 'event_update' event.id %}"><i class="fas fa-edit text-2xl"></i></a>
                   <a class="text-red-400 hover:text-red-600 transition-colors duration-300" href="{% url 'event_delete' event.id %}"><i class="fas fa-trash-alt text-2xl"></i></a>

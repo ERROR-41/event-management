@@ -17,6 +17,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 
+
 # Allow only specific hosts
 ALLOWED_HOSTS = ['event-management-ienu.onrender.com','127.0.0.1', 'localhost']
 
@@ -135,19 +136,23 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = '/static/'
-
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    os.path.join(BASE_DIR, "static"),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Create necessary directories if they don't exist
+os.makedirs(os.path.join(BASE_DIR, "static"), exist_ok=True)
+os.makedirs(os.path.join(BASE_DIR, "staticfiles"), exist_ok=True)
+
+# Media files configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+os.makedirs(MEDIA_ROOT, exist_ok=True)
+
+# Configure WhiteNoise for serving static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

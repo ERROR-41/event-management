@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-<<<<<<< HEAD
 
 {% block content %}
 <div class="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -8,11 +7,26 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
         <!-- Event Image Section -->
         <div class="relative group">
+
+          
+          
+          
+          {% if event.image.url %}`
           <img
             class="w-full h-full object-cover rounded-2xl transform group-hover:scale-105 transition duration-500"
-            src="https://storage.googleapis.com/a1aa/image/TF7EN2O9N_lxRwTv2twIeFSUTMEQex1N4zUOLaZj3Rk.jpg"
+            src="{{ event.image.url }}"
+            alt="{{ event.name }}"
+          />`
+          {% else %}
+              <img
+            class="w-full h-full object-cover rounded-2xl transform group-hover:scale-105 transition duration-500"
+            src="{% url 'images/default.jpg' %}"
             alt="{{ event.name }}"
           />
+          {% endif %}
+            
+
+
           <div class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium">
             <i class="fas fa-tag mr-2"></i> category Name: {{ event.category.name | capfirst }}
           </div>
@@ -47,10 +61,10 @@
               </div>
             </div>
 
-            <div class="flex items-center">
-              <i class="fas fa-tags text-blue-400 text-xl w-8"></i>
+            <div class="flex items-center ">
+              <i class="fas fa-tags text-blue-400 text-xl w-8 pr-3"></i>
               <div>
-                <span class="text-gray-400 text-sm">Event Category</span>
+                <span class="text-gray-400 text-sm font-bold mr-1">Category Details</span>
                 <p class="text-gray-300 font-medium">
                   {{ event.category.name | capfirst }} <span class="text-gray-400 text-sm">({{ event.category.description | capfirst }})</span>
                 </p>
@@ -91,93 +105,10 @@
                           href="{% url 'event_update' event.id %}">
               <i class="fas fa-edit mr-2"></i> Edit Event
             </a>
-=======
-{% load static %}
-{% block content %}
-  <div class="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-      <div class="bg-gray-800 rounded-3xl shadow-2xl overflow-hidden">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
-          <!-- Event Image Section -->
-          <div class="relative group ">
-            {% if event.image %}
-              <img class="w-full border border-gray-50 h-full object-cover rounded-2xl transform group-hover:scale-105 transition duration-500" src="{{ event.image.url }}" alt="{{ event.name }}" />
-            {% else %}
-              <img class="w-full h-full border border-gray-50 object-cover rounded-2xl transform group-hover:scale-105 transition duration-500" src="{% static 'images/default.jpg' %}" alt="{{ event.name }}" />
-            {% endif %}
-
-            <div class="absolute top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium">
-              <i class="fas fa-tag mr-2"></i> category Name: {{ event.category.name|capfirst }}
-            </div>
-          </div>
-
-          <!-- Event Details Section -->
-          <div class="flex flex-col justify-center">
-            <div class="mb-8">
-              <span class="text-blue-400 text-sm font-medium uppercase tracking-wider">Event Name</span>
-              <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-300 mt-2">{{ event.name|capfirst }}</h1>
-            </div>
-
-            <!-- Event Meta Data -->
-            <div class="space-y-5 mb-8">
-              <div class="flex items-center">
-                <i class="fas fa-calendar-day text-blue-400 text-xl w-8"></i>
-                <div>
-                  <span class="text-gray-400 text-sm">Event Date & Time</span>
-                  <p class="text-gray-300 font-medium">{{ event.date|date:'F j, Y' }} at {{ event.time|time:'g:i A' }}</p>
-                </div>
-              </div>
-
-              <div class="flex items-center">
-                <i class="fas fa-map-marker-alt text-blue-400 text-xl w-8"></i>
-                <div>
-                  <span class="text-gray-400 text-sm">Event Location</span>
-                  <p class="text-gray-300 font-medium">{{ event.location|capfirst }}</p>
-                </div>
-              </div>
-
-              <div class="flex items-center">
-                <i class="fas fa-tags text-blue-400 text-xl w-8"></i>
-                <div>
-                  <span class="text-gray-400 text-sm">Event Category</span>
-                  <p class="text-gray-300 font-medium">{{ event.category.name|capfirst }}</p>
-                </div>
-              </div>
-
-              <div class="flex items-center">
-                <i class="fas fa-users text-blue-400 text-xl w-8"></i>
-                <div>
-                  <span class="text-gray-400 text-sm">Participants</span>
-                  <p class="text-gray-300 font-medium">{{ event.participants.count }} Registered</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Event Description -->
-            <div class="bg-gray-700 p-6 rounded-xl mb-8">
-              <h3 class="text-gray-300 font-semibold mb-3 flex items-center">
-                <i class="fas fa-align-left text-blue-400 mr-2"></i>
-                Event Description
-              </h3>
-              <p class="text-gray-400 leading-relaxed">{{ event.category.description|capfirst }}</p>
-            </div>
-
-            <!-- Action Buttons -->
-            {% if user.groups.all.0.name == 'Admin' or user.groups.all.0.name == 'Organizer' %}
-              <div class="flex flex-col sm:flex-row gap-4">
-                <a class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 flex-1" href="{% url 'event_create' %}"><i class="fas fa-ticket-alt mr-2"></i> Create More Event</a>
-                <a class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 flex-1" href="{% url 'event_update' event.id %}"><i class="fas fa-edit mr-2"></i> Edit Event</a>
-              </div>
-            {% endif %}
->>>>>>> assignment-2
           </div>
         </div>
       </div>
     </div>
   </div>
-<<<<<<< HEAD
 </div>
 {% endblock %}
-=======
-{% endblock %}
->>>>>>> assignment-2
