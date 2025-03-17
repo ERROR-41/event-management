@@ -37,9 +37,8 @@
                 <!-- Events -->
 
                 <!-- Events -->
-                <div class="flex items-baseline justify-baseline">
-                  <span class=" font-semibold text-gray-300 dark:text-gray-400">Events:</span>
-                  <div class="ml-1">
+                <div class="flex flex-col  justify-center w-full ">
+                  <h1 class=" font-semibold text-gray-300 dark:text-gray-400 mb-4">Events:
                     {% for event in participant.events.all %}
                       <span class="text-gray-300 dark:text-gray-200">
                         <ol>
@@ -49,11 +48,13 @@
                     {% empty %}
                       <span class="text-gray-200 dark:text-gray-200">No Event Found</span>
                     {% endfor %}
-                  </div>
+                 </h1>
 
+                
+                
                 <!-- Actions -->
-                <div class="border-t pt-3 mt-3 dark:border-gray-700">
-                  <div class="flex flex-col space-y-2">
+                <div class="flex justify-between items-center border-t pt-3  dark:border-gray-700">
+                  <div class="flex  justify-center items-center space-x-8">
                     <a href="{% url 'participant_update' participant.id %}" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md transition-colors flex items-center justify-center">
                       <i class="fas fa-edit mr-2"></i>
                       Edit
