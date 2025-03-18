@@ -1,7 +1,12 @@
+import os
 from decouple import config, Csv
 from pathlib import Path
 import dj_database_url
-import os
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url    
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,6 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
     "crispy_forms",
     "crispy_tailwind",
     'corsheaders', 
@@ -104,6 +111,13 @@ DATABASES = {
     conn_max_age=600)
  }
 
+cloudinary.config(
+    CLOUD_NAME=config('CLOUD_NAME'),
+    API_KEY=config('API_KEY'),
+    API_SECRET=config('API_SECRET')
+)
+   
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -143,23 +157,30 @@ STATICFILES_DIRS = [
 ]
 
 # Create necessary directories if they don't exist
-os.makedirs(os.path.join(BASE_DIR, "static"), exist_ok=True)
 os.makedirs(os.path.join(BASE_DIR, "staticfiles"), exist_ok=True)
 
-# Media files configuration
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-os.makedirs(MEDIA_ROOT, exist_ok=True)
 
 # Configure WhiteNoise for serving static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+
+# Media files configuration
+
+
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=config('CLOUD_NAME'),
+    api_key=config('API_KEY'),
+    api_secret=config('API_SECRET')
+)
+
+# Use Cloudinary for media file storage
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Frontend URL
 FRONTEND_URL = config('FRONTEND_URL')

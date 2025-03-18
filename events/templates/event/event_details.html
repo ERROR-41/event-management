@@ -9,7 +9,6 @@
           <!-- Event Image Section -->
           <div class="relative group">
             {% if event.image %}
-              `
               <img class="w-full h-full object-cover rounded-2xl transform group-hover:scale-105 transition duration-500" src="{{ event.image.url }}" alt="{{ event.name }}" />
             {% else %}
               <img class="w-full h-full object-cover rounded-2xl transform group-hover:scale-105 transition duration-500" src="{% static 'images/default.jpg' %}" alt="{{ event.name }}" />

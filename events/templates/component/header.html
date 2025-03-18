@@ -5,7 +5,7 @@
 
     <!-- Desktop Navigation Links - hidden on mobile -->
     <div class="hidden lg:flex items-center lg:space-x-1 xl:space-x-4 xl:text-base lg:text-sm text-sans font-semibold">
-      <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'home' %}">Home</a>
+      <a class="text-white hover:text-blue-400 transition-colors duration-300 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'home' %}">Home</a>
 
       <!-- Events Dropdown -->
       {% if 'Admin' in user_roles or 'Organizer' in user_roles %}
@@ -15,8 +15,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
-          <div class="absolute left-0 hidden bg-gray-800 text-white shadow-lg group-hover:block rounded-b min-w-[120px] z-10">
-            <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'event_create' %}">Create</a>
+          <div class="absolute left-0 hidden bg-gray-800 text-white shadow-lg group-hover:block rounded-b min-w-[10px] z-10">
+            <a class="block px-4 py-2 hover:bg-gray-700 content-stretch" href="{% url 'event_create' %}">Create</a>
           </div>
         </div>
       {% endif %}
@@ -59,15 +59,15 @@
             </svg>
           </button>
           <div class="absolute left-0 hidden bg-gray-800 text-white shadow-lg group-hover:block rounded-b min-w-[120px] z-10">
+            <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'admin_dashboard' %}">Dashboard</a>
             <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'create_group' %}">Create Group</a>
-            <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'group_list' %}">Group List</a>
+            <a class="block px-4 py-2 hover:bg-gray-700" href="{% url 'group_list' %}">Group List</a> 
           </div>
         </div>
       {% endif %}
 
       {% if 'Admin' in user_roles %}
-        <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
-        <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">RSVP Dashboard</a>
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">Admin RSVP </a>
       {% elif 'Organizer' in user_roles %}
         <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'organizer_dashboard' %}">Organizer Dashboard</a>
         <a class="text-white hover:text-blue-400 transition-colors duration-300 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">RSVP Dashboard</a>
@@ -190,7 +190,7 @@
 
       {% if 'Admin' in user_roles %}
         <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
-        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">RSVP Dashboard</a>
+        <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">RSVP </a>
       {% elif 'Organizer' in user_roles %}
         <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'participant_dashboard' %}">Participant Dashboard</a>
         <a class="text-white hover:text-blue-400 transition-colors duration-300 block px-3 py-3 bg-gray-800 hover:bg-gray-700 rounded" href="{% url 'organizer_dashboard' %}">Organizer Dashboard</a>
