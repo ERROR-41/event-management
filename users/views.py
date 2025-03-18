@@ -25,7 +25,6 @@ def sign_up(request):
       user.set_password(form.cleaned_data.get('password1'))
       user.is_active = False
       user.save()
-      time.sleep(0.5) 
       messages.success(request, 'A confirmation email has been sent to your email address. Please click on the link to activate your account.')
       return redirect('sign_in')
   return render(request, 'registration/registration.html', {'form': form})
