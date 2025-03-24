@@ -8,12 +8,30 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator
 from users.forms import AssignRoleForm, createGroupForm
 from django.views.decorators.http import require_GET
+from django.views.generic import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 import time
 
 
 def is_admin(user):
    return user.groups.filter(name='Admin').exists()
 
+def profile(request):
+  return render(request,'profile.html')
+
+class EditProfileView(LoginRequiredMixin,UpdateView):
+    login_url = "sign-in"
+    model = User
+    from_class = 'EditProfileForm'
+    context_object_name ='form'
+    template_name ='accounts/update_profile.html'
+    
+    def get_object(self):
+       return super().request.user
+     
+    def form_valid(self,form):
+      form.save()
+      return redirect("Profile")
 
 
 def sign_up(request):
@@ -46,7 +64,6 @@ def sign_in(request):
     else:
         messages.error(request, 'Please Enter Correct Username and Password')
   return render (request, 'registration/login.html',{'form':form})
-
 
 
 @login_required
@@ -116,12 +133,10 @@ def update_group(request, group_id):
             messages.success(request, f'{group.name} has been updated successfully')
             return redirect('group_list')
     return render(request, 'admin/create_group.html', {'form': form, 'group': group})
-        
+
 
 @login_required
 @user_passes_test(is_admin, login_url='sign_in')
 def group_list(request):
     groups = Group.objects.only('id', 'name').prefetch_related('permissions')
     return render(request, 'admin/group_list.html', {'groups': groups})
-
-

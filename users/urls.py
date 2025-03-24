@@ -1,10 +1,11 @@
 from django.urls import path
-from users.views import sign_up,sign_in,sign_out,activate_user,admin_dashboard,assign_role,create_group,group_list,update_group
+from users.views import sign_up,sign_in,sign_out,activate_user,admin_dashboard,assign_role,create_group,group_list,update_group,profile
+
 
 urlpatterns = [
     path('sign-up/',sign_up,name='sign_up'),
     path('sign-in/',sign_in,name='sign_in'),
-
+    path('profile/',profile,name='profile'),
     path('sign-out/',sign_out,name='sign_out'),
     path('activate/<int:user_id>/<str:token>/',activate_user,name='activate'),
     path('admin/dashboard/',admin_dashboard,name='admin_dashboard'),

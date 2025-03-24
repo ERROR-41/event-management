@@ -21,8 +21,6 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-
-
 # Allow only specific hosts
 ALLOWED_HOSTS = ['event-management-ienu.onrender.com','127.0.0.1', 'localhost']
 
@@ -43,6 +41,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Application definition
+
 
 INSTALLED_APPS = [
     "debug_toolbar",
@@ -116,7 +115,7 @@ cloudinary.config(
     API_KEY=config('API_KEY'),
     API_SECRET=config('API_SECRET')
 )
-   
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -145,7 +144,7 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
- 
+
 USE_TZ = True
 
 

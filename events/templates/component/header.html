@@ -97,7 +97,8 @@
                 (Participant)
               {% endif %}
             </span>
-          </p>
+          </p> 
+          <a class="block px-4 py-2 w-full max-w-48 hover:bg-gray-700" href="{% url 'profile' %}" >Profile </a>
           <hr />
           <form method="post" action="{% url 'sign_out' %}">
             {% csrf_token %}
