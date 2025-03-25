@@ -187,6 +187,11 @@ class RSVPCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('home')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = get_object_or_404(Event, id=self.kwargs['event_id'])
+        return context
+
 
 class RSVPDeleteView(LoginRequiredMixin, DeleteView):
     model = RSVP
