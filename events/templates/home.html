@@ -113,7 +113,7 @@
               {% if 'Organizer' in user_roles or 'Admin' in user_roles %}
                 <div class="flex space-x-4">
                   {% if request.user in event.user_event.all %}
-                    <a class="text-blue-400 cursor-not-allowed opacity-50 transition-colors duration-300" href="javascript:void(0)" title="You have already RSVPed"><i class="fas fa-regular fa-calendar-check text-2xl"></i></a>
+                    <a class="text-blue-400 cursor-not-allowed opacity-50 transition-colors duration-300"  title="You have already RSVPed"><i class="fas fa-regular fa-calendar-check text-2xl"></i></a>
                   {% else %}
                     <a class="text-blue-400 hover:text-gray-50 transition-colors duration-300" href="{% url 'create_rsvp' event.id %}" title="Add RSVP"><i class="fas fa-regular fa-calendar-check text-2xl"></i></a>
                   {% endif %}
@@ -123,7 +123,11 @@
                 </div>
               {% elif 'Participant' in user_roles %}
                 <div class="flex space-x-2">
-                  <a class="text-white bg-green-600 hover:bg-green-700 transition-colors duration-300 px-6 py-2 text-base rounded-lg" href="{% url 'create_rsvp' event.id %}">Add RSVP</a>
+                  {% if request.user in event.user_event.all %}
+                    <a class="text-white bg-green-600 hover:bg-green-700 transition-colors duration-300 px-6 py-2 text-base rounded-lg cursor-not-allowed opacity-50" >RSVPed</a>
+                  {% else %}
+                    <a class="text-white bg-green-600 hover:bg-green-700 transition-colors duration-300 px-6 py-2 text-base rounded-lg" href="{% url 'create_rsvp' event.id %}">Add RSVP</a>
+                  {% endif %}
                 </div>
               {% endif %}
             </div>
