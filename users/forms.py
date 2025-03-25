@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm,PasswordResetForm,SetPasswordForm
 from django.contrib.auth.models import User,Group,Permission
 
 
@@ -28,15 +28,21 @@ class User_RegistrationForm(UserCreationForm):
             raise forms.ValidationError("This email is already in use. Please use a different email.")
         return email
 
-class User_LoginForm(AuthenticationForm):
-    username = forms.CharField(
-        label='Username',
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your username'})
-    )
-    password = forms.CharField(
-        label='Password',
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'})
-    )
+class LoginForm(AuthenticationForm):  
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+
+
+class CustomPasswordChangeForm( PasswordChangeForm):
+    pass
+
+
+class CustomPasswordResetForm( PasswordResetForm):
+    pass
+
+
+class CustomPasswordResetConfirmForm( SetPasswordForm):
+    pass
 
 
 class AssignRoleForm(forms.Form):
@@ -78,4 +84,3 @@ class User_EditForm(forms.ModelForm):
         if email != self.instance.email and User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already in use. Please use a different email.")
         return email
-

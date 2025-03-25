@@ -110,8 +110,6 @@ def event_create(request):
         if form.is_valid():
             form.save()
             return redirect('home')
-        else:
-            print(form.errors)  # Log form errors
     else:
         form = EventForm()
     return render(request, 'event/event_form.html', {'form': form})
@@ -126,8 +124,6 @@ def event_update(request, pk):
         if form.is_valid():
             form.save()
             return redirect('home')
-        else:
-            print(form.errors)  # Log form errors
     else:
         form = EventForm(instance=event)
     return render(request, 'event/event_form.html', {'form': form})
@@ -173,8 +169,6 @@ def category_update(request, pk):
         if form.is_valid():
             form.save()
             return redirect('category_list')
-        else:
-            print(form.errors)  # Log form errors
     else:
         form = CategoryForm(instance=category)
     return render(request, 'category/category_form.html', {'form': form, 'category': category})
@@ -231,8 +225,6 @@ def participant_update(request, pk):
         if form.is_valid():
             form.save()
             return redirect('participant_list')
-        else:
-            print(form.errors)  # Log form errors
     else:
         form = User_EditForm(instance=participant)
     return render(request, 'participant/participant_form.html', {'form': form, 'participant': participant})

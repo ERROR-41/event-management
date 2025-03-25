@@ -198,3 +198,5 @@ LOGIN_REDIRECT_URL = config('LOGIN_REDIRECT_URL')
 LOGOUT_REDIRECT_URL = config('LOGOUT_REDIRECT_URL')
 
 PORT= config('PORT', cast=int)
+
+AUTH_USER_MODEL = "users.CustomUser"
