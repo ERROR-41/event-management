@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import UniqueConstraint
+import cloudinary
 from cloudinary.models import CloudinaryField
 from django.conf import settings
 
@@ -28,10 +29,9 @@ class Event(models.Model):
     location = models.CharField(max_length=100, choices=LOCATION_CHOICES)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     user_event = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, through="RSVP", related_name="events"
-    )
-    # image = CloudinaryField("image", null=True, blank=True)
-    image = models.ImageField("/events/", null=True, blank=True)
+        settings.AUTH_USER_MODEL, through="RSVP", related_name="events")
+    image = CloudinaryField("image", null=True, blank=True)
+    # image = models.ImageField("/events/", null=True, blank=True)
 
     def __str__(self):
         return self.name

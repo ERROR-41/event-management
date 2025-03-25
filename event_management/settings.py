@@ -2,9 +2,9 @@ import os
 from decouple import config, Csv
 from pathlib import Path
 import dj_database_url
-# import cloudinary
-# import cloudinary.uploader
-# from cloudinary.utils import cloudinary_url
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'cloudinary_storage',
-    # 'cloudinary',
+    'cloudinary_storage',
+    'cloudinary',
     "crispy_forms",
     "crispy_tailwind",
     'corsheaders', 
@@ -112,11 +112,11 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 #     conn_max_age=600)
 #  }
 
-# cloudinary.config(
-#     CLOUD_NAME=config('CLOUD_NAME'),
-#     API_KEY=config('API_KEY'),
-#     API_SECRET=config('API_SECRET')
-# )
+cloudinary.config(
+    CLOUD_NAME=config('CLOUD_NAME'),
+    API_KEY=config('API_KEY'),
+    API_SECRET=config('API_SECRET')
+)
 
 # offline database
 
@@ -172,20 +172,20 @@ STATICFILES_DIRS = [
 
 # media related
 
-MEDIA_URL = "/media/"
+# MEDIA_URL = "/media/"
 
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_ROOT = BASE_DIR / "media"
 
 # Create necessary directories if they don't exist
 os.makedirs(os.path.join(BASE_DIR, "staticfiles"), exist_ok=True)
 
 
 # Configure WhiteNoise for serving static files
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Use Cloudinary for media file storage
-# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Default primary key field type

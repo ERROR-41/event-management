@@ -106,10 +106,16 @@ def home(request):
 @login_required
 def event_create(request):
     if request.method == 'POST':
-        form = EventForm(request.POST,request.FILES)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('home')
+            try:
+                form.save()
+                messages.success(request, "Event created successfully!")
+                return redirect('home')
+            except Exception as e:
+                messages.error(request, f"An error occurred while saving the event: {e}")
+        else:
+            messages.error(request, "Please correct the errors in the form.")
     else:
         form = EventForm()
     return render(request, 'event/event_form.html', {'form': form})
