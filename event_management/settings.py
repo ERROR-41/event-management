@@ -23,13 +23,13 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Allow only specific hosts
 # ALLOWED_HOSTS = ["event-management-ienu.onrender.com", "127.0.0.1", "localhost"]
-ALLOWED_HOSTS = [ "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # CSRF trusted origins
-# CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv())
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv())
 
 # CSRF_TRUSTED_ORIGINS = [ 'https://event-management-ienu.onrender.com','http://127.0.0.1:8000']
-CSRF_TRUSTED_ORIGINS = [ 'http://127.0.0.1:8000']	
+# CSRF_TRUSTED_ORIGINS = [ 'http://127.0.0.1:8000']	
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -193,8 +193,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Frontend URL
-# FRONTEND_URL = config('FRONTEND_URL')
-FRONTEND_URL = "http://127.0.0.1:8000"
+FRONTEND_URL = config('FRONTEND_URL')
+# FRONTEND_URL = "http://127.0.0.1:8000"
 
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
