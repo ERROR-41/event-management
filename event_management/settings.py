@@ -2,9 +2,9 @@ import os
 from decouple import config, Csv
 from pathlib import Path
 import dj_database_url
-import cloudinary
-import cloudinary.uploader
-from cloudinary.utils import cloudinary_url    
+# import cloudinary
+# import cloudinary.uploader
+# from cloudinary.utils import cloudinary_url
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -22,12 +22,14 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 
 # Allow only specific hosts
-ALLOWED_HOSTS = ['event-management-ienu.onrender.com','127.0.0.1', 'localhost']
+# ALLOWED_HOSTS = ["event-management-ienu.onrender.com", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [ "127.0.0.1", "localhost"]
 
 # CSRF trusted origins
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv())
+# CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", cast=Csv())
 
-CSRF_TRUSTED_ORIGINS = [ 'https://event-management-ienu.onrender.com','http://127.0.0.1:8000']	
+# CSRF_TRUSTED_ORIGINS = [ 'https://event-management-ienu.onrender.com','http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = [ 'http://127.0.0.1:8000']	
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -37,7 +39,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
-    config('FRONTEND_URL'),
+    # config('FRONTEND_URL'),
 ]
 
 # Application definition
@@ -51,8 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary_storage',
-    'cloudinary',
+    # 'cloudinary_storage',
+    # 'cloudinary',
     "crispy_forms",
     "crispy_tailwind",
     'corsheaders', 
@@ -104,17 +106,30 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 # setup onrender database
 
-DATABASES = {
-    'default': dj_database_url.config(
-    default=config('DATABASE_URL'),
-    conn_max_age=600)
- }
+# DATABASES = {
+#     'default': dj_database_url.config(
+#     default=config('DATABASE_URL'),
+#     conn_max_age=600)
+#  }
 
-cloudinary.config(
-    CLOUD_NAME=config('CLOUD_NAME'),
-    API_KEY=config('API_KEY'),
-    API_SECRET=config('API_SECRET')
-)
+# cloudinary.config(
+#     CLOUD_NAME=config('CLOUD_NAME'),
+#     API_KEY=config('API_KEY'),
+#     API_SECRET=config('API_SECRET')
+# )
+
+# offline database
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "event-management",
+        "USER": "postgres",
+        "PASSWORD": "error",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
 
 
 # Password validation
@@ -155,26 +170,22 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+# media related
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "media"
+
 # Create necessary directories if they don't exist
 os.makedirs(os.path.join(BASE_DIR, "staticfiles"), exist_ok=True)
 
 
 # Configure WhiteNoise for serving static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
-# Media files configuration
-
-
-# Configure Cloudinary
-cloudinary.config(
-    cloud_name=config('CLOUD_NAME'),
-    api_key=config('API_KEY'),
-    api_secret=config('API_SECRET')
-)
 
 # Use Cloudinary for media file storage
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Default primary key field type
@@ -182,7 +193,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Frontend URL
-FRONTEND_URL = config('FRONTEND_URL')
+# FRONTEND_URL = config('FRONTEND_URL')
+FRONTEND_URL = "http://127.0.0.1:8000"
 
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

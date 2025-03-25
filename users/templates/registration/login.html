@@ -7,7 +7,7 @@
 
 {% block content %}
   {% if messages %}
-    <div id="message-container" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex items-center max-w-sm bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out z-50">
+    <div id="message-container" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex items-center max-w-sm bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ease-in-out z-50"  role="alert">
       {% for message in messages %}
         {% if forloop.last %}
           <div class="flex items-center p-4 {% if message.tags == 'success' %}
@@ -54,7 +54,7 @@
     </script>
   {% endif %}
 
-  <div class="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
+  <div class="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 min-h-screen ">
     <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
       <div class="w-full max-w-md">
         <!-- Brand Logo -->
@@ -64,7 +64,7 @@
         </div>
 
         <!-- Login Card -->
-        <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 ring-1 ring-gray-400">
           <form method="POST" class="space-y-6">
             {% csrf_token %}
             

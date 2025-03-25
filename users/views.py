@@ -4,15 +4,16 @@ from django.contrib.auth import authenticate, login ,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
-from users.forms import AssignRoleForm, createGroupForm,LoginForm,CustomPasswordChangeForm,CustomPasswordResetForm,CustomPasswordResetConfirmForm
+from users.forms import AssignRoleForm, createGroupForm,LoginForm,CustomPasswordChangeForm,CustomPasswordResetForm,CustomPasswordResetConfirmForm,User_EditForm
 from django.views.decorators.http import require_GET
 from django.views.generic import UpdateView
 from django.contrib.auth.views import LoginView,PasswordChangeView,PasswordResetView,PasswordResetConfirmView,PasswordResetDoneView,PasswordResetCompleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-import time
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 def is_admin(user):
@@ -21,19 +22,18 @@ def is_admin(user):
 def profile(request):
   return render(request,'profile.html')
 
-class EditProfileView(LoginRequiredMixin,UpdateView):
-    login_url = "sign-in"
-    model = User
-    from_class = 'EditProfileForm'
-    context_object_name ='form'
-    template_name ='accounts/update_profile.html'
+def EditProfileView(request, pk):
+    user = User.objects.get(id=pk)
+    form = User_EditForm(instance=user)
+    if request.method == 'POST':
+        form = User_EditForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    return render(request, 'accounts/update_profile.html', {'form': form})
     
-    def get_object(self):
-       return super().request.user
-     
-    def form_valid(self,form):
-      form.save()
-      return redirect("Profile")
+    
+    
 
 
 def sign_up(request):
