@@ -106,11 +106,11 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 # setup onrender database
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#     default=config('DATABASE_URL'),
-#     conn_max_age=600)
-#  }
+DATABASES = {
+    'default': dj_database_url.config(
+    default=config('DATABASE_URL'),
+    conn_max_age=600)
+ }
 
 cloudinary.config(
     CLOUD_NAME=config('CLOUD_NAME'),
@@ -120,16 +120,16 @@ cloudinary.config(
 
 # offline database
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "event-management",
-        "USER": "postgres",
-        "PASSWORD": "error",
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "event-management",
+#         "USER": "postgres",
+#         "PASSWORD": "error",
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
 
 
 # Password validation

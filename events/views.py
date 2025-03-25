@@ -1,91 +1,82 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from django.db.models import Q
+from django.utils.timezone import now
 from events.models import Event, Category, RSVP
 from events.forms import EventForm, CategoryForm, RSVPForm
-from django.db.models import Count, Q
-from django.utils.timezone import now
 from users.forms import User_EditForm
-from django.contrib.auth.decorators import login_required , user_passes_test
-from django.contrib import messages
 from django.contrib.auth import get_user_model
-User =get_user_model()
+
+User = get_user_model()
 
 
-
-# Custom error handler
-def error_500(request):
-    return render(request, 'error.html', status=500)
-
-# views.py
-
-def error(request):
-    return render(request, 'error.html')
-
-def test(request):
-    return render(request, 'nav.html')
-
-def is_admin(user):
-    return user.groups.filter(name='Admin').exists()
-
-def is_admin_or_organizer(user):
-    return user.groups.filter(name__in=['Admin', 'Organizer']).exists()
-
-def is_all_roles(user):
-    return user.groups.filter(name__in=['Admin', 'Organizer', 'Participant']).exists()
-
-@user_passes_test(is_admin_or_organizer)
-@login_required
-def organizer_dashboard(request):
-    # Get the event type from the request, defaulting to 'all'
-    type = request.GET.get('type', 'all')
-    
-    # Fetch all events with related category (optimized for fewer queries)
-    base_events = Event.objects.select_related('category').all()
-    
-    # Precompute counts for events and participants
-    total_participants = User.objects.count()
-    total_events = base_events.count()
-    today = now().date()
-    date_now = base_events.filter(date__lt=now())
-    
-    
-    # Determine the events to display based on the type
-    if type == 'total_events':
-        events = base_events
-    elif type == 'upcoming_events':
-        events = base_events.filter(date__gte=now()).order_by('date')
-    elif type == 'past_events':
-        events = date_now.order_by('-date')
-    else:  # Default: events happening today
-        events = base_events.filter(date=today).order_by('date')
-
-    # Precompute upcoming and past event counts (avoid redundant queries)
-    upcoming_events_count = base_events.filter(date__gte=now()).count()
-    past_events_count = date_now.count()
+class IsAdminMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.groups.filter(name='Admin').exists()
 
 
-    # Prepare the context for rendering
-    context = {
-        'events': events,
-        'total_events': total_events,
-        'total_participants': total_participants,
-        'upcoming_events': upcoming_events_count,
-        'past_events': past_events_count,
-        'type': type,
-    }
-
-    # Render the dashboard template with the context
-    return render(request, 'organizer/organizer_dashboard.html', context)
+class IsAdminOrOrganizerMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.groups.filter(name__in=['Admin', 'Organizer']).exists()
 
 
-@login_required
-def home(request):
-    events = Event.objects.select_related('category').prefetch_related('user_event').all()
-    form = EventForm()
-    location_coices = events
-    
-    if request.method == 'GET':
-        event_name = request.GET.get('event_name', '')
-        event_location = request.GET.get('event_location', '')
+class IsAllRolesMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.groups.filter(name__in=['Admin', 'Organizer', 'Participant']).exists()
+
+
+class ErrorView(TemplateView):
+    template_name = 'error.html'
+
+
+class TestView(TemplateView):
+    template_name = 'nav.html'
+
+
+class OrganizerDashboardView(LoginRequiredMixin, IsAdminOrOrganizerMixin, TemplateView):
+    template_name = 'organizer/organizer_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        type = self.request.GET.get('type', 'all')
+        base_events = Event.objects.select_related('category').all()
+        total_participants = User.objects.count()
+        total_events = base_events.count()
+        today = now().date()
+        date_now = base_events.filter(date__lt=now())
+
+        if type == 'total_events':
+            events = base_events
+        elif type == 'upcoming_events':
+            events = base_events.filter(date__gte=now()).order_by('date')
+        elif type == 'past_events':
+            events = date_now.order_by('-date')
+        else:
+            events = base_events.filter(date=today).order_by('date')
+
+        context.update({
+            'events': events,
+            'total_events': total_events,
+            'total_participants': total_participants,
+            'upcoming_events': base_events.filter(date__gte=now()).count(),
+            'past_events': date_now.count(),
+            'type': type,
+        })
+        return context
+
+
+class HomeView(LoginRequiredMixin, TemplateView):
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        events = Event.objects.select_related('category').prefetch_related('user_event').all()
+        form = EventForm()
+        event_name = self.request.GET.get('event_name', '')
+        event_location = self.request.GET.get('event_location', '')
 
         if event_name and event_location:
             events = events.filter(Q(name__icontains=event_name) | Q(location=event_location))
@@ -93,192 +84,125 @@ def home(request):
             events = events.filter(name__icontains=event_name)
         elif event_location:
             events = events.filter(location=event_location)
-    
-    context = {
-        'events': events.order_by('id'),
-        'form': form,
-        'location_choices': location_coices.distinct('location').values_list('location', flat=True)        
-    }
-    return render(request, 'home.html', context)
 
-# all event related views
-@user_passes_test(is_admin_or_organizer)
-@login_required
-def event_create(request):
-    if request.method == 'POST':
-        form = EventForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                form.save()
-                messages.success(request, "Event created successfully!")
-                return redirect('home')
-            except Exception as e:
-                messages.error(request, f"An error occurred while saving the event: {e}")
-        else:
-            messages.error(request, "Please correct the errors in the form.")
-    else:
-        form = EventForm()
-    return render(request, 'event/event_form.html', {'form': form})
+        context.update({
+            'events': events.order_by('id'),
+            'form': form,
+            'location_choices': events.distinct('location').values_list('location', flat=True),
+        })
+        return context
 
 
-@user_passes_test(is_admin_or_organizer)
-@login_required
-def event_update(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    if request.method == 'POST':
-        form = EventForm(request.POST,request.FILES, instance=event)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = EventForm(instance=event)
-    return render(request, 'event/event_form.html', {'form': form})
+class EventCreateView(LoginRequiredMixin, IsAdminOrOrganizerMixin, CreateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'event/event_form.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        messages.success(self.request, "Event created successfully!")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Please correct the errors in the form.")
+        return super().form_invalid(form)
 
 
-@user_passes_test(is_admin_or_organizer)
-@login_required
-def event_delete(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    if request.method == 'POST':
-        event.delete()
-        return redirect('home')
-    return render(request, 'event/event_confirm_delete.html', {'event': event})
+class EventUpdateView(LoginRequiredMixin, IsAdminOrOrganizerMixin, UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'event/event_form.html'
+    success_url = reverse_lazy('home')
 
 
-@login_required
-@user_passes_test(is_all_roles)
-def event_details(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    return render(request, 'event/event_details.html', {'event': event})
-
-# all category related views
-@user_passes_test(is_admin_or_organizer)
-@login_required
-def category_create(request):
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('category_list')
-    else:
-        form = CategoryForm()
-    return render(request, 'category/category_form.html', {'form': form})
+class EventDeleteView(LoginRequiredMixin, IsAdminOrOrganizerMixin, DeleteView):
+    model = Event
+    template_name = 'event/event_confirm_delete.html'
+    success_url = reverse_lazy('home')
 
 
-
-@login_required
-@user_passes_test(is_admin_or_organizer)
-def category_update(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        form = CategoryForm(request.POST, instance=category)
-        if form.is_valid():
-            form.save()
-            return redirect('category_list')
-    else:
-        form = CategoryForm(instance=category)
-    return render(request, 'category/category_form.html', {'form': form, 'category': category})
-
-@login_required
-@user_passes_test(is_admin_or_organizer)
-def category_list(request):
-    categories = Category.objects.all().order_by('id')
-    return render(request, 'category/category_list.html', {'categories': categories})
-
-@login_required
-@user_passes_test(is_admin_or_organizer)
-def category_delete(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    if request.method == 'POST':
-        category.delete()
-        return redirect('category_list')
-    return render(request, 'category/category_confirm_delete.html', {'category': category})
+class EventDetailView(LoginRequiredMixin, IsAllRolesMixin, DetailView):
+    model = Event
+    template_name = 'event/event_details.html'
 
 
-# all participant related views
-# def participant_create(request):
-#     if request.method == 'POST':
-#         form = ParticipantForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('participant_list')
-#     else:
-#         form = ParticipantForm()
-#     return render(request, 'participant/participant_form.html', {'form': form})
-
-@login_required
-@user_passes_test(is_admin)
-def participant_delete(request, pk):
-    participant = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        participant.delete()
-        return redirect('participant_list')
-    return render(request, 'participant/participant_confirm_delete.html', {'participant': participant})
+class CategoryCreateView(LoginRequiredMixin, IsAdminOrOrganizerMixin, CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'category/category_form.html'
+    success_url = reverse_lazy('category_list')
 
 
-@login_required
-@user_passes_test(is_admin)
-def participant_list(request):
-    user = User.objects.prefetch_related('events').order_by('id').all()
-    return render(request, 'participant/participant_list.html', {'participants': user})
+class CategoryUpdateView(LoginRequiredMixin, IsAdminOrOrganizerMixin, UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'category/category_form.html'
+    success_url = reverse_lazy('category_list')
 
-@login_required
-@user_passes_test(is_admin)
-def participant_update(request, pk):
-    participant = get_object_or_404(User, pk=pk)
-    if request.method == 'POST':
-        form = User_EditForm(request.POST, instance=participant)
-        if form.is_valid():
-            form.save()
-            return redirect('participant_list')
-    else:
-        form = User_EditForm(instance=participant)
-    return render(request, 'participant/participant_form.html', {'form': form, 'participant': participant})
 
-# all rsvp related views
-@login_required
-def create_rsvp(request, event_id):
-    # Get the event or return 404 if it doesn't exist
-    event = get_object_or_404(Event, id=event_id)
+class CategoryListView(LoginRequiredMixin, IsAdminOrOrganizerMixin, ListView):
+    model = Category
+    template_name = 'category/category_list.html'
+    context_object_name = 'categories'
+    ordering = ['id']
 
-    # Try to fetch the RSVP object if it exists
-    try:
-        rsvp = RSVP.objects.get(user=request.user, event=event)
-    except RSVP.DoesNotExist:
-        rsvp = None
 
-    # Handle POST request
-    if request.method == 'POST':
-        # If RSVP exists, bind the form to the existing instance; otherwise, create a new one
-        form = RSVPForm(request.POST, instance=rsvp)
-        if form.is_valid():
-            rsvp = form.save(commit=False)
-            rsvp.user = request.user  # Ensure the user is set
-            rsvp.event = event  # Ensure the event is set
-            rsvp.save()
-            messages.success(request, f"Your RSVP for '{event.name}' has been updated!")
-            return redirect('home')  # Redirect to the home page (or any relevant page)
-    else:
-        # Prefill the form with the existing RSVP data if it exists
-        form = RSVPForm(instance=rsvp)
+class CategoryDeleteView(LoginRequiredMixin, IsAdminOrOrganizerMixin, DeleteView):
+    model = Category
+    template_name = 'category/category_confirm_delete.html'
+    success_url = reverse_lazy('category_list')
 
-    # Render the RSVP form template
-    return render(request, 'rsvp/rsvp_form.html', {'form': form, 'event': event})
 
-@login_required
-def delete_rsvp(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-    rsvp = get_object_or_404(RSVP, user=request.user, event=event)
-    if request.method == 'POST':
-        rsvp.delete()
-        return redirect('participant_dashboard')
-    return render(request, 'rsvp/rsvp_confirm_delete.html', {'rsvp': rsvp})
+class ParticipantListView(LoginRequiredMixin, IsAdminMixin, ListView):
+    model = User
+    template_name = 'participant/participant_list.html'
+    context_object_name = 'participants'
+    ordering = ['id']
 
-@login_required
-def rsvp_list(request):
-    # Get the event or return a 404 if it doesn't exist
-    rsvp_list = RSVP.objects.filter(user=request.user).select_related('event').order_by('-created_at').all()
-    context = {
-        'user_rsvp': rsvp_list,
-    }
-    return render(request, 'participant/participant_dashboard.html', context)
+
+class ParticipantUpdateView(LoginRequiredMixin, IsAdminMixin, UpdateView):
+    model = User
+    form_class = User_EditForm
+    template_name = 'participant/participant_form.html'
+    success_url = reverse_lazy('participant_list')
+
+
+class ParticipantDeleteView(LoginRequiredMixin, IsAdminMixin, DeleteView):
+    model = User
+    template_name = 'participant/participant_confirm_delete.html'
+    success_url = reverse_lazy('participant_list')
+
+
+class RSVPCreateView(LoginRequiredMixin, CreateView):
+    model = RSVP
+    form_class = RSVPForm
+    template_name = 'rsvp/rsvp_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.event = get_object_or_404(Event, id=self.kwargs['event_id'])
+        messages.success(self.request, f"Your RSVP for '{form.instance.event.name}' has been updated!")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+
+class RSVPDeleteView(LoginRequiredMixin, DeleteView):
+    model = RSVP
+    template_name = 'rsvp/rsvp_confirm_delete.html'
+
+    def get_object(self):
+        return get_object_or_404(RSVP, user=self.request.user, event_id=self.kwargs['event_id'])
+
+    def get_success_url(self):
+        return reverse_lazy('participant_dashboard')
+
+
+class RSVPListView(LoginRequiredMixin, ListView):
+    model = RSVP
+    template_name = 'participant/participant_dashboard.html'
+    context_object_name = 'user_rsvp'
+
+    def get_queryset(self):
+        return RSVP.objects.filter(user=self.request.user).select_related('event').order_by('-created_at')
