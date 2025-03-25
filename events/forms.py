@@ -3,10 +3,10 @@ from django import forms
 from .models import Event, Category, RSVP
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-# from cloudinary.forms import CloudinaryFileField
+from cloudinary.forms import CloudinaryFileField
 
 class EventForm(forms.ModelForm):
-    # image = CloudinaryFileField()
+    image = CloudinaryFileField()
     class Meta:
         model = Event
         fields = ['name', 'description', 'date', 'time', 'location', 'category', 'image']
@@ -21,8 +21,6 @@ class EventForm(forms.ModelForm):
             'date': 'Event Date',
             'time': 'Event Time',
         }
-
-   
 
 
 class CategoryForm(forms.ModelForm):
@@ -57,4 +55,3 @@ class RSVPForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RSVPForm, self).__init__(*args, **kwargs)
         self.fields['response'].required = True
-    

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm,PasswordResetForm,SetPasswordForm
 from django.contrib.auth.models import Group,Permission
 from django.contrib.auth import get_user_model
+from cloudinary.forms import CloudinaryFileField
 User = get_user_model()
 
 
@@ -64,6 +65,7 @@ class createGroupForm(forms.ModelForm):
         fields = ['name', 'permissions']
 
 class User_EditForm(forms.ModelForm):
+    profile_picture = CloudinaryFileField()
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'profile_picture', 'bio']
